@@ -3,6 +3,7 @@
 import { useState, useEffect, useTransition } from "react";
 import { createClient } from "@/libs/supabase/client";
 import { createDeck, deleteDeck } from "@/app/actions";
+import DuplicateDeckButton from "@/components/DuplicateDeckButton";
 
 export default function Dashboard() {
   const [profile, setProfile] = useState(null); 
@@ -109,12 +110,6 @@ export default function Dashboard() {
             <label className="text-[9px] font-black uppercase tracking-widest opacity-40">Cover Letter</label>
             <textarea name="cover_letter" className="w-full min-h-[100px] bg-white dark:bg-black/20 border border-slate-300 dark:border-white/10 p-6 text-slate-900 dark:text-white placeholder:text-slate-300 focus:border-[#a855f7] outline-none transition-all" placeholder="Paste tailored cover letter content..."></textarea>
           </div>
-
-          {/* ADDED RESUME BODY FIELD */}
-          <div className="space-y-2">
-            <label className="text-[9px] font-black uppercase tracking-widest opacity-40">Resume Content (Manual Paste)</label>
-            <textarea name="resume_body" className="w-full min-h-[200px] bg-white dark:bg-black/20 border border-slate-300 dark:border-white/10 p-6 text-slate-900 dark:text-white placeholder:text-slate-300 focus:border-[#a855f7] outline-none transition-all" placeholder="Paste resume experience, skills, etc..."></textarea>
-          </div>
           
           <button className="bg-slate-900 dark:bg-white text-white dark:text-black py-5 font-black uppercase text-xs tracking-[0.2em] hover:bg-[#a855f7] hover:text-white transition-all cursor-pointer">
             {isPending ? 'Processing...' : 'Deploy Link'}
@@ -127,7 +122,7 @@ export default function Dashboard() {
         <div className="border border-slate-200 dark:border-white/10 divide-y divide-slate-200 dark:divide-white/10">
           {decks.map(deck => (
             <div key={deck.id} className="p-8 bg-white dark:bg-transparent flex items-center justify-between group hover:bg-slate-50 dark:hover:bg-white/[0.02] transition-all">
-              <div className="space-y-2">
+              <div className="space-y-2 text-left">
                 <span className="text-[#a855f7] font-black text-[10px] uppercase tracking-widest">{deck.viewCount} Recipient Opens</span>
                 <div className="flex items-center gap-3">
                   <h3 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white uppercase">{deck.is_public ? "Public Profile" : deck.company}</h3>
@@ -138,7 +133,10 @@ export default function Dashboard() {
                 </p>
               </div>
               <div className="flex items-center gap-10">
-                <a href={`http://${profile?.handle}.lvh.me:3000/t/${deck.company.replace(/\s+/g, '-')}/${deck.slug.replace(/\s+/g, '-')}`} target="_blank" rel="noopener noreferrer"className="text-[10px] font-black uppercase tracking-widest text-slate-900 dark:text-white underline decoration-[#a855f7]/40 underline-offset-8 hover:decoration-[#a855f7]">View Link</a>
+                <a href={`http://${profile?.handle}.lvh.me:3000/t/${deck.company.replace(/\s+/g, '-')}/${deck.slug.replace(/\s+/g, '-')}`} target="_blank" rel="noopener noreferrer" className="text-[10px] font-black uppercase tracking-widest text-slate-900 dark:text-white underline decoration-[#a855f7]/40 underline-offset-8 hover:decoration-[#a855f7]">View Link</a>
+                
+                <DuplicateDeckButton deck={deck} onComplete={refreshDecks} />
+                
                 <button onClick={() => handleArchive(deck.id)} className="text-[10px] font-black uppercase tracking-widest text-red-600 hover:text-red-700 transition-colors cursor-pointer">Archive</button>
               </div>
             </div>

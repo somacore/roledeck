@@ -30,10 +30,10 @@ export default async function TrackerPage({ params }) {
 
   if (!profile) return notFound();
 
-  // 2. Fetch Deck
+  // 2. Fetch Deck (Including the new formatted_resume column)
   const { data: deck, error: deckError } = await supabase
     .from("decks")
-    .select("id, company, slug, cover_letter, resume_body, resume_url, tracking_email")
+    .select("id, company, slug, cover_letter, resume_body, resume_url, tracking_email, formatted_resume")
     .eq("user_id", profile.id)
     .ilike("company", company)
     .ilike("slug", slug)
@@ -62,16 +62,14 @@ export default async function TrackerPage({ params }) {
     secureResumeUrl = signedData?.signedUrl;
   }
 
-  // 5. ON-DEMAND FORMATTING LOGIC
+  // 5. REFINED ON-DEMAND LOGIC
   let resumeData = null;
-  
-  // Check if it's already an object (new/fixed data) or a string (old/trash data)
-  const isRawString = typeof deck.resume_body === 'string';
 
-  if (!isRawString && deck.resume_body !== null) {
-    resumeData = deck.resume_body;
-  } else if (isRawString && deck.resume_body.length > 10) {
-    // 🚀 SELF-HEALING: If the data is a string, fix it on-demand
+  if (deck.formatted_resume) {
+    // Priority 1: Use the dedicated formatted column for instant load
+    resumeData = deck.formatted_resume;
+  } else if (typeof deck.resume_body === 'string' && deck.resume_body.length > 10) {
+    // Priority 2: Heal trash text on-demand if no formatted version exists
     try {
       const model = genAI.getGenerativeModel({ 
         model: "gemini-2.5-flash",
@@ -97,20 +95,21 @@ export default async function TrackerPage({ params }) {
 
       const result = await model.generateContent(prompt);
       const parsed = JSON.parse(result.response.text());
-      
-      // Update local variable for immediate display
       resumeData = parsed;
 
-      // ✅ SAVE BACK TO DB: Avoid parsing this link again
+      // ✅ CACHE TO DB: Save to the dedicated column so we never parse this link again
       await supabaseAdmin
         .from("decks")
-        .update({ resume_body: parsed })
+        .update({ formatted_resume: parsed })
         .eq("id", deck.id);
 
     } catch (e) {
       console.error("On-demand parsing failed:", e);
-      resumeData = null; // Fallback to raw text rendering below
+      resumeData = null; 
     }
+  } else if (deck.resume_body && typeof deck.resume_body === 'object') {
+    // Legacy fallback for when resume_body was already an object
+    resumeData = deck.resume_body;
   }
 
   const introText = deck.cover_letter?.content || String(deck.cover_letter || "");
@@ -120,31 +119,24 @@ export default async function TrackerPage({ params }) {
       <div className="max-w-4xl mx-auto p-12 bg-white shadow-xl rounded-sm print:shadow-none print:p-0">
         
         {/* TOP ACTION BAR */}
-        
-        {/* TOP ACTION BAR */}
-<div className="flex flex-wrap justify-end items-center gap-3 mb-12 no-print">
-  
-  {/* ✅ NEW: SEND TO EMAIL MODAL */}
-  <SendResumeButton 
-    portalUrl={typeof window !== 'undefined' ? window.location.href : ''} 
-    companyName={company} 
-  />
-
-  <CopyEmailButton email={deck.tracking_email} />
-  
-  {secureResumeUrl && (
-    <a 
-      href={secureResumeUrl} 
-      target="_blank" 
-      rel="noopener noreferrer"
-      className="bg-black text-white px-6 py-3 text-[10px] font-black uppercase tracking-widest hover:bg-[#7c3aed] transition-all flex items-center gap-2"
-    >
-      Download PDF
-    </a>
-  )}
-  
-  <PrintButton />
-</div>
+        <div className="flex flex-wrap justify-end items-center gap-3 mb-12 no-print">
+          <SendResumeButton 
+            portalUrl={typeof window !== 'undefined' ? window.location.href : ''} 
+            companyName={company} 
+          />
+          <CopyEmailButton email={deck.tracking_email} />
+          {secureResumeUrl && (
+            <a 
+              href={secureResumeUrl} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="bg-black text-white px-6 py-3 text-[10px] font-black uppercase tracking-widest hover:bg-[#7c3aed] transition-all flex items-center gap-2"
+            >
+              Download PDF
+            </a>
+          )}
+          <PrintButton />
+        </div>
 
         {/* RESUME HEADER */}
         <div className="flex justify-between items-start border-b-4 border-black pb-6 mb-10">
@@ -167,7 +159,7 @@ export default async function TrackerPage({ params }) {
         {/* TAILORED INTRO */}
         {introText && (
           <section className="mb-12">
-            <h2 className="text-xs font-black uppercase tracking-[0.3em] text-gray-300 mb-6 flex items-center gap-4">
+            <h2 className="text-xs font-black uppercase tracking-[0.3em] text-gray-500 mb-6 flex items-center gap-4">
               Tailored Introduction <div className="h-[1px] bg-gray-100 flex-1"></div>
             </h2>
             <div className="text-xl italic text-gray-700 whitespace-pre-wrap leading-relaxed border-l-4 border-gray-100 pl-8">
@@ -183,7 +175,7 @@ export default async function TrackerPage({ params }) {
               {/* STRUCTURED SKILLS */}
               {resumeData.skills?.length > 0 && (
                 <section>
-                  <h2 className="text-xs font-black uppercase tracking-[0.3em] text-gray-300 mb-4 flex items-center gap-4">
+                  <h2 className="text-xs font-black uppercase tracking-[0.3em] text-gray-500 mb-4 flex items-center gap-4">
                     Skills <div className="h-[1px] bg-gray-100 flex-1"></div>
                   </h2>
                   <div className="flex flex-wrap gap-2">
@@ -199,7 +191,7 @@ export default async function TrackerPage({ params }) {
               {/* STRUCTURED EXPERIENCE */}
               {resumeData.experience?.length > 0 && (
                 <section className="mb-12">
-                  <h2 className="text-xs font-black uppercase tracking-[0.3em] text-gray-300 mb-6 flex items-center gap-4">
+                  <h2 className="text-xs font-black uppercase tracking-[0.3em] text-gray-500 mb-6 flex items-center gap-4">
                     Professional Experience <div className="h-[1px] bg-gray-100 flex-1"></div>
                   </h2>
                   <div className="space-y-8">
@@ -207,7 +199,7 @@ export default async function TrackerPage({ params }) {
                       <div key={i} className="mb-8">
                         <div className="flex justify-between items-baseline mb-1">
                           <h3 className="text-xl font-black uppercase tracking-tight">{job.role}</h3>
-                          <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">{job.dates}</span>
+                          <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">{job.dates}</span>
                         </div>
                         <p className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-3">{job.company}</p>
                         <ul className="list-disc pl-5 space-y-2 text-sm leading-relaxed text-gray-800">
@@ -222,9 +214,8 @@ export default async function TrackerPage({ params }) {
               )}
             </>
           ) : (
-            /* FALLBACK: If AI failed or data is missing, show raw text */
             <section>
-              <h2 className="text-xs font-black uppercase tracking-[0.3em] text-gray-300 mb-6 flex items-center gap-4">
+              <h2 className="text-xs font-black uppercase tracking-[0.3em] text-gray-500 mb-6 flex items-center gap-4">
                 Experience Details <div className="h-[1px] bg-gray-100 flex-1"></div>
               </h2>
               <div className="whitespace-pre-wrap text-sm leading-[1.8] text-gray-800 font-medium">
