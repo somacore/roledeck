@@ -6,9 +6,25 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import PrintButton from "@/components/PrintButton";
 import CopyEmailButton from "@/components/CopyEmailButton";
 import SendResumeButton from "@/components/SendResumeButton";
+import StudioRenderer from "@/components/StudioRenderer";
+import { getSEOTags } from "@/libs/seo";
 
 // Initialize Gemini for on-demand restructuring
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
+/**
+ * Generate dynamic SEO tags for the tailored portal.
+ */
+export async function generateMetadata({ params }) {
+  const { username, company } = await params;
+  const decodedCompany = decodeURIComponent(company).replace(/-/g, ' ');
+  
+  return getSEOTags({
+    title: `Tailored Portal: ${decodedCompany} | RoleDeck`,
+    description: `Private career portal for the team at ${decodedCompany}.`,
+    canonicalUrlRelative: `/user/${username}/t/${company}`,
+  });
+}
 
 export default async function TrackerPage({ params }) {
   const resolvedParams = await params;
@@ -30,10 +46,16 @@ export default async function TrackerPage({ params }) {
 
   if (!profile) return notFound();
 
-  // 2. Fetch Deck (Including the new formatted_resume column)
+  // 2. Fetch Deck (Including template data if assigned)
   const { data: deck, error: deckError } = await supabase
     .from("decks")
-    .select("id, company, slug, cover_letter, resume_body, resume_url, tracking_email, formatted_resume")
+    .select(`
+      *,
+      templates (
+        id,
+        config
+      )
+    `)
     .eq("user_id", profile.id)
     .ilike("company", company)
     .ilike("slug", slug)
@@ -53,7 +75,7 @@ export default async function TrackerPage({ params }) {
     });
   } catch (e) { console.error("Telemetry failed"); }
 
-  // 4. Secure Download URL
+  // 4. Secure Resume Download URL
   let secureResumeUrl = null;
   if (deck.resume_url) {
     const { data: signedData } = await supabaseAdmin.storage
@@ -62,54 +84,36 @@ export default async function TrackerPage({ params }) {
     secureResumeUrl = signedData?.signedUrl;
   }
 
-  // 5. REFINED ON-DEMAND LOGIC
-  let resumeData = null;
-
-  if (deck.formatted_resume) {
-    // Priority 1: Use the dedicated formatted column for instant load
-    resumeData = deck.formatted_resume;
-  } else if (typeof deck.resume_body === 'string' && deck.resume_body.length > 10) {
-    // Priority 2: Heal trash text on-demand if no formatted version exists
+  // 5. On-Demand Logic for Resume Data
+  let resumeData = deck.formatted_resume;
+  if (!resumeData && typeof deck.resume_body === 'string' && deck.resume_body.length > 10) {
     try {
       const model = genAI.getGenerativeModel({ 
         model: "gemini-2.5-flash",
         generationConfig: { responseMimeType: "application/json" }
       });
-
-      const prompt = `
-        You are a resume spacing and structure expert. 
-        TASK: Fix the word spacing and structure this raw resume text into JSON. 
-        Re-insert missing spaces (e.g., convert "MarketingManager" to "Marketing Manager").
-
-        RAW TEXT: ${deck.resume_body}
-
-        Return ONLY this JSON:
-        {
-          "full_name": "string",
-          "skills": ["string"],
-          "experience": [
-            { "company": "string", "role": "string", "dates": "string", "bullets": ["string"] }
-          ]
-        }
-      `;
-
+      const prompt = `Structure this resume text into JSON: ${deck.resume_body}. Return ONLY: { "full_name": "", "skills": [], "experience": [{ "company": "", "role": "", "dates": "", "bullets": [] }] }`;
       const result = await model.generateContent(prompt);
-      const parsed = JSON.parse(result.response.text());
-      resumeData = parsed;
+      resumeData = JSON.parse(result.response.text());
+      await supabaseAdmin.from("decks").update({ formatted_resume: resumeData }).eq("id", deck.id);
+    } catch (e) { console.error("On-demand parsing failed"); }
+  }
 
-      // ✅ CACHE TO DB: Save to the dedicated column so we never parse this link again
-      await supabaseAdmin
-        .from("decks")
-        .update({ formatted_resume: parsed })
-        .eq("id", deck.id);
-
-    } catch (e) {
-      console.error("On-demand parsing failed:", e);
-      resumeData = null; 
+  // 6. Server-Side Studio Asset Signing
+  let signedConfig = deck.templates?.config;
+  if (signedConfig?.sections) {
+    for (let section of signedConfig.sections) {
+      if (section.type === 'gallery' && section.content.images) {
+        for (let img of section.content.images) {
+          if (img.path) {
+            const { data } = await supabaseAdmin.storage
+              .from('studio-assets')
+              .createSignedUrl(img.path, 3600);
+            img.signedUrl = data?.signedUrl;
+          }
+        }
+      }
     }
-  } else if (deck.resume_body && typeof deck.resume_body === 'object') {
-    // Legacy fallback for when resume_body was already an object
-    resumeData = deck.resume_body;
   }
 
   const introText = deck.cover_letter?.content || String(deck.cover_letter || "");
@@ -130,7 +134,7 @@ export default async function TrackerPage({ params }) {
               href={secureResumeUrl} 
               target="_blank" 
               rel="noopener noreferrer"
-              className="bg-black text-white px-6 py-3 text-[10px] font-black uppercase tracking-widest hover:bg-[#7c3aed] transition-all flex items-center gap-2"
+              className="bg-black text-white px-6 py-3 text-[10px] font-black uppercase tracking-widest hover:bg-primary transition-all flex items-center gap-2"
             >
               Download PDF
             </a>
@@ -138,58 +142,43 @@ export default async function TrackerPage({ params }) {
           <PrintButton />
         </div>
 
-        {/* RESUME HEADER */}
-        <div className="flex justify-between items-start border-b-4 border-black pb-6 mb-10">
-          <div className="space-y-1">
-            <h1 className="text-5xl font-black uppercase tracking-tighter leading-none">
-              {resumeData?.full_name || profile.full_name}
-            </h1>
-            <p className="text-xl font-medium text-gray-500">{profile.email}</p>
-          </div>
-          <div className="text-right">
-            <span className="text-[10px] font-black bg-black text-white px-2 py-1 uppercase tracking-widest leading-none">
-              {company} Portal
-            </span>
-            <p className="text-sm font-bold text-gray-400 uppercase tracking-tighter mt-2">
-              {deck.slug}
-            </p>
-          </div>
-        </div>
-
-        {/* TAILORED INTRO */}
-        {introText && (
-          <section className="mb-12">
-            <h2 className="text-xs font-black uppercase tracking-[0.3em] text-gray-500 mb-6 flex items-center gap-4">
-              Tailored Introduction <div className="h-[1px] bg-gray-100 flex-1"></div>
-            </h2>
-            <div className="text-xl italic text-gray-700 whitespace-pre-wrap leading-relaxed border-l-4 border-gray-100 pl-8">
-              {introText}
+        {deck.templates ? (
+          <StudioRenderer 
+            config={signedConfig} 
+            resumeData={resumeData} 
+          />
+        ) : (
+          <>
+            <div className="flex justify-between items-start border-b-4 border-black pb-6 mb-10">
+              <div className="space-y-1">
+                <h1 className="text-5xl font-black uppercase tracking-tighter leading-none">
+                  {resumeData?.full_name || profile.full_name}
+                </h1>
+                <p className="text-xl font-medium text-gray-500">{profile.email}</p>
+              </div>
+              <div className="text-right">
+                <span className="text-[10px] font-black bg-black text-white px-2 py-1 uppercase tracking-widest leading-none">
+                  {company} Portal
+                </span>
+                <p className="text-sm font-bold text-gray-400 uppercase tracking-tighter mt-2">
+                  {deck.slug}
+                </p>
+              </div>
             </div>
-          </section>
-        )}
 
-        {/* MAIN CONTENT */}
-        <div className="space-y-12">
-          {resumeData ? (
-            <>
-              {/* STRUCTURED SKILLS */}
-              {resumeData.skills?.length > 0 && (
-                <section>
-                  <h2 className="text-xs font-black uppercase tracking-[0.3em] text-gray-500 mb-4 flex items-center gap-4">
-                    Skills <div className="h-[1px] bg-gray-100 flex-1"></div>
-                  </h2>
-                  <div className="flex flex-wrap gap-2">
-                    {resumeData.skills.map((skill, i) => (
-                      <span key={i} className="bg-gray-100 px-3 py-1 text-[10px] font-black uppercase text-gray-600">
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </section>
-              )}
+            {introText && (
+              <section className="mb-12">
+                <h2 className="text-xs font-black uppercase tracking-[0.3em] text-gray-500 mb-6 flex items-center gap-4">
+                  Tailored Introduction <div className="h-[1px] bg-gray-100 flex-1"></div>
+                </h2>
+                <div className="text-xl italic text-gray-700 whitespace-pre-wrap leading-relaxed border-l-4 border-gray-100 pl-8">
+                  {introText}
+                </div>
+              </section>
+            )}
 
-              {/* STRUCTURED EXPERIENCE */}
-              {resumeData.experience?.length > 0 && (
+            <div className="space-y-12">
+              {resumeData?.experience?.length > 0 && (
                 <section className="mb-12">
                   <h2 className="text-xs font-black uppercase tracking-[0.3em] text-gray-500 mb-6 flex items-center gap-4">
                     Professional Experience <div className="h-[1px] bg-gray-100 flex-1"></div>
@@ -212,18 +201,9 @@ export default async function TrackerPage({ params }) {
                   </div>
                 </section>
               )}
-            </>
-          ) : (
-            <section>
-              <h2 className="text-xs font-black uppercase tracking-[0.3em] text-gray-500 mb-6 flex items-center gap-4">
-                Experience Details <div className="h-[1px] bg-gray-100 flex-1"></div>
-              </h2>
-              <div className="whitespace-pre-wrap text-sm leading-[1.8] text-gray-800 font-medium">
-                {deck.resume_body || "No experience data available."}
-              </div>
-            </section>
-          )}
-        </div>
+            </div>
+          </>
+        )}
 
         <footer className="mt-20 pt-8 border-t border-gray-100 flex justify-between items-center opacity-30 text-[10px] font-bold uppercase tracking-[0.2em]">
            <span>Verified RoleDeck Portal</span>

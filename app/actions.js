@@ -12,7 +12,99 @@ const pdf = require("pdf-parse-fork");
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 /**
- * RESTORED: Sends the tailored portal link to a specified recipient via email.
+ * DECK STUDIO: Deletes a design template.
+ */
+export async function deleteTemplate(id) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { error: true, message: "Unauthorized" };
+
+  const { error } = await supabase
+    .from("templates")
+    .delete()
+    .eq("id", id)
+    .eq("user_id", user.id);
+
+  if (error) return { error: true, message: error.message };
+
+  revalidatePath("/dashboard/studio");
+  return { success: true };
+}
+
+/**
+ * DECK STUDIO: Updates the template assigned to a specific deck.
+ */
+export async function updateDeckTemplate(deckId, templateId) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { error: true, message: "Unauthorized" };
+
+  const { error } = await supabase
+    .from("decks")
+    .update({ template_id: templateId || null })
+    .eq("id", deckId)
+    .eq("user_id", user.id);
+
+  if (error) return { error: true, message: error.message };
+
+  revalidatePath("/dashboard");
+  revalidatePath(`/dashboard/${deckId}`);
+  return { success: true };
+}
+
+/**
+ * DECK STUDIO: Uploads an image to the private studio-assets bucket.
+ */
+export async function uploadStudioAsset(formData) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { error: true, message: "Unauthorized" };
+
+  const file = formData.get("file");
+  if (!file) return { error: true, message: "No file provided" };
+
+  const fileExt = file.name.split('.').pop();
+  const filePath = `${user.id}/${Date.now()}.${fileExt}`;
+
+  const { error } = await supabase.storage
+    .from('studio-assets')
+    .upload(filePath, file);
+
+  if (error) return { error: true, message: error.message };
+
+  return { success: true, path: filePath };
+}
+
+/**
+ * DECK STUDIO: Initializes a new design template.
+ */
+export async function createTemplate(formData) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  
+  if (!user) return { error: true, message: "Unauthorized" };
+
+  const name = formData.get("name");
+  const config = JSON.parse(formData.get("config") || '{"sections": []}');
+
+  const { data, error } = await supabase
+    .from("templates")
+    .insert([{
+      user_id: user.id,
+      name: name,
+      config: config
+    }])
+    .select()
+    .single();
+
+  if (error) return { error: true, message: error.message };
+  
+  revalidatePath("/dashboard/studio");
+  return { success: true, id: data.id };
+}
+
+/**
+ * CORE: Sends the tailored portal link via email.
  */
 export async function sendResumeEmail(recipientEmail, portalUrl, companyName) {
   try {
@@ -41,7 +133,7 @@ export async function sendResumeEmail(recipientEmail, portalUrl, companyName) {
 }
 
 /**
- * Creates a new tracking deck and structures it with AI.
+ * CORE: Creates a tracking deck and parses resume with AI.
  */
 export async function createDeck(formData) {
   const supabase = await createClient();
@@ -50,7 +142,6 @@ export async function createDeck(formData) {
 
   const isPublic = formData.get("is_public") === "on";
   
-  // Ensure only one Primary Profile exists at a time
   if (isPublic) {
     await supabase.from("decks").update({ is_public: false }).eq("user_id", user.id);
   }
@@ -99,7 +190,7 @@ export async function createDeck(formData) {
 }
 
 /**
- * Updates user profile (excludes permanent handle).
+ * CORE: Updates user profile.
  */
 export async function updateProfile(formData) {
   const supabase = await createClient();
@@ -117,7 +208,7 @@ export async function updateProfile(formData) {
 }
 
 /**
- * Duplicates a deck (Ensures is_public is false for the copy).
+ * CORE: Duplicates a deck.
  */
 export async function duplicateDeck(originalId, modifiedData) {
   const supabase = await createClient();
@@ -143,7 +234,7 @@ export async function duplicateDeck(originalId, modifiedData) {
 }
 
 /**
- * Soft deletes a deck.
+ * CORE: Soft deletes a deck.
  */
 export async function deleteDeck(id) {
   const supabase = await createClient();

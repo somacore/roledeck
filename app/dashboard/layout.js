@@ -58,11 +58,23 @@ export default function DashboardLayout({ children }) {
               href="/dashboard" 
               className={`block px-4 py-3 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all ${
                 pathname === "/dashboard" 
-                  ? "bg-white dark:bg-white/5 shadow-sm dark:shadow-none text-[#a855f7]" 
+                  ? "bg-white dark:bg-white/5 shadow-sm dark:shadow-none text-primary" 
                   : "text-slate-500 hover:text-slate-900 dark:text-white/40 dark:hover:text-white"
               }`}
             >
               Decks
+            </Link>
+
+            {/* DECK STUDIO - NEW TOP LEVEL SECTION */}
+            <Link 
+              href="/dashboard/studio" 
+              className={`block px-4 py-3 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all ${
+                pathname.startsWith("/dashboard/studio") 
+                  ? "bg-white dark:bg-white/5 shadow-sm dark:shadow-none text-primary border-l-2 border-primary" 
+                  : "text-slate-500 hover:text-slate-900 dark:text-white/40 dark:hover:text-white"
+              }`}
+            >
+              Deck Studio
             </Link>
           </div>
 
@@ -81,7 +93,7 @@ export default function DashboardLayout({ children }) {
                     href={`/dashboard/analytics/${deck.id}`} 
                     className={`block px-4 py-2 text-[10px] font-bold uppercase tracking-widest truncate rounded-lg transition-all ${
                       pathname.includes(deck.id) 
-                        ? "bg-[#a855f7]/10 text-[#a855f7]" 
+                        ? "bg-primary/10 text-primary" 
                         : "text-slate-500 hover:text-slate-900 dark:text-white/40 dark:hover:text-white"
                     }`}
                   >
@@ -99,7 +111,7 @@ export default function DashboardLayout({ children }) {
             href="/dashboard/profile"
             className={`flex items-center gap-3 px-4 py-1.5 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all ${
               pathname === "/dashboard/profile"
-                ? "bg-white dark:bg-white/5 text-[#a855f7]"
+                ? "bg-white dark:bg-white/5 text-primary"
                 : "text-slate-500 hover:text-slate-900 dark:text-white/40 dark:hover:text-white"
             }`}
           >
@@ -115,7 +127,7 @@ export default function DashboardLayout({ children }) {
             href="/dashboard/billing"
             className={`flex items-center gap-3 w-full text-left px-4 py-1.5 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all ${
               pathname === "/dashboard/billing"
-                ? "bg-white dark:bg-white/5 text-[#a855f7]"
+                ? "bg-white dark:bg-white/5 text-primary"
                 : "text-slate-500 hover:text-slate-900 dark:text-white/40 dark:hover:text-white"
             }`}
           >

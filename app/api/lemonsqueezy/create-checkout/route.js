@@ -20,7 +20,7 @@ export async function POST(req) {
 
     const checkoutUrl = await createCheckout({
       variantId: body.variantId,
-      redirectUrl: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/dashboard`,
+      redirectUrl: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://lvh.me:3000'}/dashboard`,
       user: user,
     });
 
