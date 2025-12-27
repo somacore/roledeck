@@ -13,42 +13,47 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const supabase = createClient();
 
-  const fetchDecks = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (user) {
+  const fetchWorkspaceData = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
       const { data: prof } = await supabase
         .from("profiles")
         .select("handle")
         .eq("id", user.id)
         .single();
-      setProfile(prof);
+      
+      if (prof) setProfile(prof);
 
-      const { data } = await supabase
+      const { data: deckData } = await supabase
         .from("decks")
         .select("*")
         .eq("user_id", user.id)
         .is("deleted_at", null)
         .order("created_at", { ascending: false });
-      setDecks(data || []);
+
+      if (deckData) setDecks(deckData);
+    } catch (err) {
+      console.error("Fetch Error:", err);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   useEffect(() => {
-    fetchDecks();
+    fetchWorkspaceData();
   }, []);
-
-  const handleArchive = async (id) => {
-    await deleteDeck(id);
-    toast.success("Deck archived");
-    fetchDecks();
-  };
 
   if (loading) return (
     <div className="text-[10px] font-black uppercase tracking-[0.4em] opacity-20">
       Initializing_Workspace...
     </div>
   );
+
+  // Formatting the handle for the header (e.g., Mike.RoleDeck.io)
+  const handle = profile?.handle || "User";
+  const brandedIdentity = `${handle.charAt(0).toUpperCase() + handle.slice(1)}.RoleDeck.io`;
 
   return (
     <div className="space-y-12">
@@ -57,11 +62,13 @@ export default function DashboardPage() {
           <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-[#a855f7]">
             Active Deployments
           </h2>
-          <h1 className="text-3xl font-black uppercase tracking-tighter text-slate-950 dark:text-white leading-none">
-            Decks
-          </h1>
+          <div className="flex items-baseline gap-4">
+            <h1 className="text-3xl font-black uppercase tracking-tighter text-slate-950 dark:text-white leading-none">
+              {brandedIdentity}
+            </h1>
+          </div>
         </div>
-        <CreateDeckModal onComplete={fetchDecks} />
+        <CreateDeckModal onComplete={fetchWorkspaceData} />
       </header>
 
       <div className="space-y-4">
@@ -83,13 +90,14 @@ export default function DashboardPage() {
                     {deck.is_public ? "Main Deck" : deck.company}
                   </h3>
                   {deck.is_public && (
-                    <span className="px-2 py-0.5 bg-[#a855f7]/10 text-[#a855f7] text-[8px] font-black uppercase tracking-widest rounded">
+                    <span className="px-2 py-0.5 bg-[#a855f7] text-white text-[8px] font-black uppercase tracking-widest rounded shadow-sm">
                       Live
                     </span>
                   )}
                 </div>
-                <p className="text-[10px] font-bold uppercase tracking-widest opacity-30">
-                  {deck.is_public ? "Root Subdomain" : `Slug: ${deck.slug}`}
+                
+                <p className="text-[10px] font-black uppercase tracking-widest text-[#a855f7]">
+                  {brandedIdentity}{!deck.is_public && `/t/${deck.company.replace(/\s+/g, '-').toLowerCase()}`}
                 </p>
               </div>
 
@@ -97,8 +105,8 @@ export default function DashboardPage() {
                 <a 
                   href={
                     deck.is_public 
-                      ? `http://${profile?.handle}.lvh.me:3000` 
-                      : `http://${profile?.handle}.lvh.me:3000/t/${deck.company.replace(/\s+/g, '-')}/${deck.slug.replace(/\s+/g, '-')}`
+                      ? `http://${handle}.lvh.me:3000` 
+                      : `http://${handle}.lvh.me:3000/t/${deck.company.replace(/\s+/g, '-')}/${deck.slug}`
                   } 
                   target="_blank" 
                   rel="noopener noreferrer" 
@@ -107,10 +115,14 @@ export default function DashboardPage() {
                   View Link
                 </a>
                 
-                <DuplicateDeckButton deck={deck} onComplete={fetchDecks} />
+                <DuplicateDeckButton deck={deck} onComplete={fetchWorkspaceData} />
 
                 <button 
-                  onClick={() => handleArchive(deck.id)} 
+                  onClick={async () => {
+                    await deleteDeck(deck.id);
+                    fetchWorkspaceData();
+                    toast.success("Deck Archived");
+                  }} 
                   className="text-[10px] font-black uppercase tracking-widest text-red-600 hover:text-red-700 transition-colors cursor-pointer"
                 >
                   Archive
