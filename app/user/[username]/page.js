@@ -1,70 +1,103 @@
 import { createClient } from "@/libs/supabase/server";
+import { createAdminClient } from "@/libs/supabase/admin";
 import { notFound } from "next/navigation";
+import { headers } from "next/headers";
+import PrintButton from "@/components/PrintButton";
 
 export default async function PublicResume({ params }) {
   const { username } = await params;
+  const headerList = await headers();
   const supabase = await createClient();
+  const supabaseAdmin = createAdminClient();
 
   // 1. Get the Profile ID from the handle
   const { data: profile } = await supabase
     .from("profiles")
-    .select("id")
-    .eq("handle", username)
+    .select("id, full_name, email")
+    .ilike("handle", username)
     .single();
 
   if (!profile) return notFound();
 
-  // 2. Fetch ONLY the deck marked as 'is_public'
-  const { data: deck, error } = await supabase
+  // 2. Fetch the deck marked as Primary Profile
+  const { data: deck } = await supabase
     .from("decks")
     .select("*")
     .eq("user_id", profile.id)
     .eq("is_public", true)
     .is("deleted_at", null)
-    .single();
+    .maybeSingle();
 
-  // 3. If no public resume is set, we can show a 404 or a prompt
-  if (!deck || error) {
+  if (!deck) {
     return (
-      <main className="min-h-screen bg-base-200 flex items-center justify-center p-6">
-        <div className="text-center space-y-4">
-          <h1 className="text-2xl font-black uppercase tracking-tighter">Resume Not Found</h1>
-          <p className="opacity-60 max-w-xs mx-auto">
-            You haven't marked a deck as your "Main Public Resume" in the dashboard yet.
-          </p>
-          <a href="/dashboard" className="btn btn-primary btn-sm">Go to Dashboard</a>
+      <main className="min-h-screen bg-white flex items-center justify-center p-6 text-center">
+        <div className="space-y-4">
+          <h1 className="text-sm font-black uppercase tracking-[0.4em] text-slate-400">Profile Offline</h1>
+          <p className="text-[10px] font-bold uppercase tracking-widest opacity-30">This user has not published a primary profile.</p>
         </div>
       </main>
     );
   }
 
-  // 4. Render the General Resume
+  // 3. Telemetry: Record the visit to the root profile
+  try {
+    const ip = headerList.get("x-forwarded-for")?.split(",")[0] || "127.0.0.1";
+    const userAgent = headerList.get("user-agent");
+    await supabaseAdmin.from("views").insert({
+      deck_id: deck.id,
+      viewer_ip: ip,
+      user_agent: userAgent
+    });
+  } catch (e) { console.error("Telemetry failed"); }
+
+  // 4. Use formatted_resume from AI
+  const resume = deck.formatted_resume;
+
   return (
-    <div className="min-h-screen bg-base-200/50 py-12 px-4">
-      <main className="max-w-4xl mx-auto">
-        <header className="bg-base-100 p-8 rounded-t-3xl border-x border-t border-base-300 shadow-sm">
-          <h1 className="text-4xl font-black tracking-tight uppercase mb-1">
-            {username}
-          </h1>
-          <p className="text-primary font-mono font-bold text-lg">
-            {deck.tracking_email || "General Portfolio"}
-          </p>
-        </header>
-
-        <article className="bg-base-100 p-8 md:p-12 border border-base-300 shadow-xl rounded-b-3xl">
-          <div className="prose prose-lg max-w-none text-base-content/80 leading-relaxed whitespace-pre-wrap">
-            {deck.resume_data?.content}
+    <div className="min-h-screen bg-slate-50 text-slate-950 font-sans py-20 px-6">
+      <div className="max-w-4xl mx-auto p-16 bg-white shadow-sm print:p-0 print:shadow-none">
+        
+        <div className="flex justify-between items-start pb-10 mb-12 border-b-4 border-slate-900">
+          <div className="space-y-2">
+            <h1 className="text-5xl font-black uppercase tracking-tighter leading-none">
+              {resume?.full_name || profile.full_name}
+            </h1>
+            <p className="text-lg font-bold uppercase tracking-widest text-slate-400">{profile.email}</p>
           </div>
-        </article>
-
-        <footer className="mt-12 flex flex-col items-center gap-2 opacity-30 text-[10px] uppercase tracking-widest font-bold">
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-success"></div>
-            <span>Verified Public Profile</span>
+          <div className="no-print">
+            <PrintButton />
           </div>
-          <p>© {new Date().getFullYear()} {username}</p>
+        </div>
+
+        {resume?.experience?.length > 0 && (
+          <section className="space-y-12">
+            <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-[#a855f7] mb-8">Professional History</h2>
+            <div className="space-y-12">
+              {resume.experience.map((job, i) => (
+                <div key={i}>
+                  <div className="flex justify-between items-baseline mb-2">
+                    <h3 className="text-xl font-black uppercase tracking-tight">{job.role}</h3>
+                    <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">{job.dates}</span>
+                  </div>
+                  <p className="text-xs font-black uppercase tracking-widest text-slate-900 mb-4">{job.company}</p>
+                  <ul className="space-y-2">
+                    {job.bullets?.map((bullet, j) => (
+                      <li key={j} className="text-sm font-medium leading-relaxed text-slate-600 flex gap-4">
+                        <span className="shrink-0 text-[#a855f7]">—</span> {bullet}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        <footer className="mt-32 pt-8 border-t border-slate-100 flex justify-between opacity-20 text-[9px] font-black uppercase tracking-widest">
+           <span>Verified RoleDeck Identity</span>
+           <span>© {new Date().getFullYear()}</span>
         </footer>
-      </main>
+      </div>
     </div>
   );
 }
