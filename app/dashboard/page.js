@@ -46,12 +46,6 @@ export default async function DashboardPage() {
 
         <div className="flex gap-4">
           <Link 
-            href="/dashboard/studio"
-            className="px-6 py-3 bg-white dark:bg-white/5 border-2 border-slate-950 dark:border-white text-[10px] font-black uppercase tracking-[0.2em] hover:bg-slate-950 hover:text-white dark:hover:bg-white dark:hover:text-black transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)]"
-          >
-            Design Studio
-          </Link>
-          <Link 
             href="/dashboard/new" 
             className="px-6 py-3 bg-primary text-white text-[10px] font-black uppercase tracking-[0.2em] hover:opacity-90 transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)]"
           >
