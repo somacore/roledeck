@@ -6,16 +6,19 @@ import { createRequire } from "module";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
 const require = createRequire(import.meta.url);
 const pdf = require("pdf-parse-fork");
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 /**
  * CORE: Sends the tailored portal link via email.
  */
 export async function sendResumeEmail(recipientEmail, portalUrl, companyName) {
   try {
+    if (!process.env.RESEND_API_KEY) {
+      return { success: false };
+    }
+
+    const resend = new Resend(process.env.RESEND_API_KEY);
     const { data, error } = await resend.emails.send({
       from: 'RoleDeck Portals <portals@roledeck.io>',
       to: [recipientEmail],
@@ -71,6 +74,11 @@ export async function createDeck(formData) {
   let structuredResume = null;
   if (extractedText) {
     try {
+      if (!process.env.GEMINI_API_KEY) {
+        throw new Error("Missing GEMINI_API_KEY");
+      }
+
+      const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
       const model = genAI.getGenerativeModel({ 
         model: "gemini-2.5-flash", 
         generationConfig: { responseMimeType: "application/json" } 
