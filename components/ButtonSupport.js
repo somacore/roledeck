@@ -21,7 +21,7 @@ const ButtonSupport = () => {
 
   return (
     <button
-      className="btn btn-sm"
+      className="inline-flex items-center justify-center gap-2 px-3 py-1.5 text-xs font-semibold transition-all rounded-md border border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/5 outline-none focus:ring-2 focus:ring-primary/20"
       onClick={handleClick}
       data-tooltip-id="tooltip"
       data-tooltip-content="Talk to support"
@@ -31,7 +31,7 @@ const ButtonSupport = () => {
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 20 20"
         fill="currentColor"
-        className="w-5 h-5"
+        className="w-4 h-4"
       >
         <path
           fillRule="evenodd"

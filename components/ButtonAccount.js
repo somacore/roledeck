@@ -54,7 +54,7 @@ const ButtonAccount = () => {
 		<Popover className="relative z-10">
 			{({ open }) => (
 				<>
-					<Popover.Button className="btn">
+					<Popover.Button className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold transition-all rounded-lg border border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/5 outline-none focus:ring-2 focus:ring-primary/20">
 						{user?.user_metadata?.avatar_url ? (
 							<img
 								src={user?.user_metadata?.avatar_url}
@@ -65,7 +65,7 @@ const ButtonAccount = () => {
 								height={24}
 							/>
 						) : (
-							<span className="w-8 h-8 bg-base-100 flex justify-center items-center rounded-full shrink-0 capitalize">
+							<span className="w-8 h-8 bg-white dark:bg-black border border-black/10 dark:border-white/10 flex justify-center items-center rounded-full shrink-0 capitalize">
 								{user?.email?.charAt(0)}
 							</span>
 						)}
@@ -75,7 +75,7 @@ const ButtonAccount = () => {
 							"Account"}
 
 						{isLoading ? (
-							<span className="loading loading-spinner loading-xs"></span>
+							<span className="animate-spin rounded-full border-2 border-current border-t-transparent h-3 w-3"></span>
 						) : (
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -102,10 +102,10 @@ const ButtonAccount = () => {
 						leaveTo="transform scale-95 opacity-0"
 					>
 						<Popover.Panel className="absolute left-0 z-10 mt-3 w-screen max-w-[16rem] transform">
-							<div className="overflow-hidden rounded-xl shadow-xl ring-1 ring-base-content/10 bg-base-100 p-1">
+							<div className="overflow-hidden rounded-xl shadow-xl ring-1 ring-black/5 dark:ring-white/10 bg-white dark:bg-slate-900 p-1">
 								<div className="space-y-0.5 text-sm">
 									<button
-										className="flex items-center gap-2 hover:bg-base-300 duration-200 py-1.5 px-4 w-full rounded-lg font-medium"
+										className="flex items-center gap-2 hover:bg-black/5 dark:hover:bg-white/5 duration-200 py-1.5 px-4 w-full rounded-lg font-medium transition-colors text-left"
 										onClick={handleBilling}
 									>
 										<svg
@@ -123,7 +123,7 @@ const ButtonAccount = () => {
 										Billing
 									</button>
 									<button
-										className="flex items-center gap-2 hover:bg-error/20 hover:text-error duration-200 py-1.5 px-4 w-full rounded-lg font-medium"
+										className="flex items-center gap-2 hover:bg-red-500/10 hover:text-red-500 duration-200 py-1.5 px-4 w-full rounded-lg font-medium transition-colors text-left"
 										onClick={handleSignOut}
 									>
 										<svg

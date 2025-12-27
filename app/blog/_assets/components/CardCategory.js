@@ -6,12 +6,12 @@ const CardCategory = ({ category, tag = "h2" }) => {
 
   return (
     <Link
-      className="p-4 bg-base-200 text-base-content rounded-box duration-200 hover:bg-neutral hover:text-neutral-content"
+      className="p-6 bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/10 rounded-2xl transition-all hover:bg-slate-950 dark:hover:bg-white group"
       href={`/blog/category/${category.slug}`}
       title={category.title}
       rel="tag"
     >
-      <TitleTag className="md:text-lg font-medium">
+      <TitleTag className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 group-hover:text-white dark:group-hover:text-black transition-colors">
         {category?.titleShort || category.title}
       </TitleTag>
     </Link>

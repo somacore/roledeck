@@ -18,7 +18,7 @@ const links = [
 ];
 
 const cta = (
-  <ButtonSignin text="Prevent disputes" extraStyle="btn-primary md:btn-sm" />
+  <ButtonSignin text="Prevent disputes" extraStyle="bg-primary text-white text-xs md:px-4 md:py-2" />
 );
 
 const ButtonPopoverCategories = () => {
@@ -27,7 +27,7 @@ const ButtonPopoverCategories = () => {
       {({ open }) => (
         <>
           <Popover.Button
-            className="link no-underline flex flex-nowrap items-center gap-1 text-base-content/80 hover:text-base-content active:text-base-content focus:text-base-content duration-100"
+            className="inline-flex items-center gap-1 text-sm font-bold uppercase tracking-widest text-slate-600 dark:text-slate-400 hover:text-primary transition-colors outline-none"
             title="Open Blog categories"
           >
             Categories
@@ -35,7 +35,7 @@ const ButtonPopoverCategories = () => {
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"
               fill="currentColor"
-              className={`w-5 h-5 duration-200 ${
+              className={`w-4 h-4 duration-200 ${
                 open ? "transform rotate-180 " : ""
               }`}
             >
@@ -56,19 +56,19 @@ const ButtonPopoverCategories = () => {
           >
             <Popover.Panel className="absolute left-0 z-30 mt-3 w-screen max-w-full sm:max-w-sm transform">
               {({ close }) => (
-                <div className="overflow-hidden rounded-box shadow-lg ring-1 ring-base-content ring-opacity-5">
-                  <div className="relative grid gap-2 bg-base-100 p-2 overflow-hidden">
+                <div className="overflow-hidden rounded-2xl shadow-xl ring-1 ring-black/5 dark:ring-white/10 bg-white dark:bg-slate-900">
+                  <div className="relative grid gap-2 p-2 overflow-hidden">
                     {categories.map((category) => (
                       <div key={category.slug} onClick={() => close()}>
                         <Link
-                          className="block text-left p-3 -m-1 cursor-pointer hover:bg-base-200 rounded-box duration-200"
+                          className="block text-left p-4 rounded-xl transition-colors hover:bg-slate-50 dark:hover:bg-white/5"
                           href={`/blog/category/${category.slug}`}
                         >
                           <div className="">
-                            <p className="font-medium mb-0.5">
+                            <p className="text-sm font-black uppercase tracking-tight text-slate-900 dark:text-white mb-1">
                               {category?.titleShort || category.title}
                             </p>
-                            <p className="text-sm opacity-80">
+                            <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
                               {category?.descriptionShort ||
                                 category.description}
                             </p>
@@ -99,14 +99,14 @@ const ButtonAccordionCategories = () => {
         }}
         aria-expanded={isOpen}
         type="button"
-        className="link no-underline flex justify-between items-center w-full "
+        className="flex justify-between items-center w-full text-sm font-bold uppercase tracking-widest text-slate-600 dark:text-slate-400 hover:text-primary transition-colors"
       >
         Categories
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"
           fill="currentColor"
-          className={`w-5 h-5 duration-200 ${
+          className={`w-4 h-4 duration-200 ${
             isOpen ? "transform rotate-180 " : ""
           }`}
         >
@@ -119,12 +119,12 @@ const ButtonAccordionCategories = () => {
       </button>
 
       {isOpen && (
-        <ul className="space-y-4">
+        <ul className="space-y-4 pl-4 pt-4 border-l-2 border-slate-100 dark:border-white/5">
           {categories.map((category) => (
             <li key={category.slug}>
               <Link
                 href={`/blog/category/${category.slug}`}
-                className="text-base-content/80 hover:text-base-content duration-100 link link-hover"
+                className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 hover:text-primary transition-colors"
               >
                 {category?.titleShort || category.title}
               </Link>
@@ -137,24 +137,20 @@ const ButtonAccordionCategories = () => {
 };
 
 // This is the header that appears on all pages in the /blog folder.
-// By default it shows the logo, the links, and the CTA.
-// In the links, there's a popover with the categories.
 const HeaderBlog = () => {
   const searchParams = useSearchParams();
   const [isOpen, setIsOpen] = useState(false);
 
-  // setIsOpen(false) when the route changes (i.e: when the user clicks on a link on mobile)
   useEffect(() => {
     setIsOpen(false);
   }, [searchParams]);
 
   return (
-    <header className="bg-base-200">
-      <nav className="max-w-7xl flex items-center justify-between px-8 py-3 mx-auto">
-        {/* Your logo/name on large screens */}
+    <header className="bg-slate-50 dark:bg-black/50 border-b border-slate-200 dark:border-white/5 sticky top-0 z-50 backdrop-blur-md">
+      <nav className="max-w-7xl flex items-center justify-between px-8 py-4 mx-auto">
         <div className="flex lg:flex-1">
           <Link
-            className="flex items-center gap-2 shrink-0 "
+            className="flex items-center gap-2 shrink-0 transition-opacity hover:opacity-80"
             href="/"
             title={`${config.appName} hompage`}
           >
@@ -166,14 +162,13 @@ const HeaderBlog = () => {
               width={32}
               height={32}
             />
-            <span className="font-extrabold text-lg">{config.appName}</span>
+            <span className="font-black text-lg uppercase tracking-tighter italic text-slate-950 dark:text-white">{config.appName}</span>
           </Link>
         </div>
-        {/* Burger button to open menu on mobile */}
         <div className="flex lg:hidden">
           <button
             type="button"
-            className="-m-2.5 inline-flex items-center justify-center rounded-box p-2.5"
+            className="p-2 transition-colors rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 outline-none"
             onClick={() => setIsOpen(true)}
           >
             <span className="sr-only">Open main menu</span>
@@ -181,9 +176,9 @@ const HeaderBlog = () => {
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              strokeWidth={1.5}
+              strokeWidth={2}
               stroke="currentColor"
-              className="w-6 h-6 text-base-content"
+              className="w-6 h-6 text-slate-950 dark:text-white"
             >
               <path
                 strokeLinecap="round"
@@ -194,13 +189,12 @@ const HeaderBlog = () => {
           </button>
         </div>
 
-        {/* Your links on large screens */}
         <div className="hidden lg:flex lg:justify-center lg:gap-12 lg:items-center">
           {links.map((link) => (
             <Link
               href={link.href}
               key={link.href}
-              className="link link-hover text-base-content/80 hover:text-base-content active:text-base-content focus:text-base-content duration-100"
+              className="text-sm font-bold uppercase tracking-widest text-slate-600 dark:text-slate-400 hover:text-primary transition-colors"
               title={link.label}
             >
               {link.label}
@@ -210,19 +204,17 @@ const HeaderBlog = () => {
           <ButtonPopoverCategories />
         </div>
 
-        {/* CTA on large screens */}
         <div className="hidden lg:flex lg:justify-end lg:flex-1">{cta}</div>
       </nav>
 
-      {/* Mobile menu, show/hide based on menu state. */}
-      <div className={`relative z-50 ${isOpen ? "" : "hidden"}`}>
+      <div className={`fixed inset-0 z-50 lg:hidden transition-all duration-300 ${isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}>
+        <div className="absolute inset-0 bg-slate-900/20 backdrop-blur-sm" onClick={() => setIsOpen(false)}></div>
         <div
-          className={`fixed inset-y-0 right-0 z-10 w-full px-8 py-3 overflow-y-auto bg-base-200 sm:max-w-sm sm:ring-1 sm:ring-neutral/10 transform origin-right transition ease-in-out duration-300`}
+          className={`absolute inset-y-0 right-0 w-full max-w-sm px-8 py-4 overflow-y-auto bg-white dark:bg-slate-900 shadow-2xl transition-transform duration-300 ${isOpen ? "translate-x-0" : "translate-x-full"}`}
         >
-          {/* Your logo/name on small screens */}
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between mb-8">
             <Link
-              className="flex items-center gap-2 shrink-0 "
+              className="flex items-center gap-2 shrink-0 transition-opacity hover:opacity-80"
               title={`${config.appName} hompage`}
               href="/"
             >
@@ -230,16 +222,15 @@ const HeaderBlog = () => {
                 src={logo}
                 alt={`${config.appName} logo`}
                 className="w-8"
-                placeholder="blur"
                 priority={true}
                 width={32}
                 height={32}
               />
-              <span className="font-extrabold text-lg">{config.appName}</span>
+              <span className="font-black text-lg uppercase tracking-tighter italic text-slate-950 dark:text-white">{config.appName}</span>
             </Link>
             <button
               type="button"
-              className="-m-2.5 rounded-box p-2.5"
+              className="p-2 transition-colors rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 outline-none"
               onClick={() => setIsOpen(false)}
             >
               <span className="sr-only">Close menu</span>
@@ -247,9 +238,9 @@ const HeaderBlog = () => {
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
-                strokeWidth={1.5}
+                strokeWidth={2}
                 stroke="currentColor"
-                className="w-6 h-6"
+                className="w-6 h-6 text-slate-950 dark:text-white"
               >
                 <path
                   strokeLinecap="round"
@@ -260,15 +251,14 @@ const HeaderBlog = () => {
             </button>
           </div>
 
-          {/* Your links on small screens */}
           <div className="flow-root mt-6">
             <div className="py-4">
-              <div className="flex flex-col gap-y-4 items-start">
+              <div className="flex flex-col gap-y-8 items-start">
                 {links.map((link) => (
                   <Link
                     href={link.href}
                     key={link.href}
-                    className="link link-hover"
+                    className="text-sm font-black uppercase tracking-widest text-slate-600 dark:text-slate-400 hover:text-primary transition-colors w-full"
                     title={link.label}
                   >
                     {link.label}
@@ -277,9 +267,8 @@ const HeaderBlog = () => {
                 <ButtonAccordionCategories />
               </div>
             </div>
-            <div className="divider"></div>
-            {/* Your CTA on small screens */}
-            <div className="flex flex-col">{cta}</div>
+            <div className="h-[1px] w-full bg-slate-100 dark:bg-white/5 my-8"></div>
+            <div className="flex flex-col w-full">{cta}</div>
           </div>
         </div>
       </div>

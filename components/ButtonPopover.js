@@ -7,7 +7,7 @@ const ButtonPopover = () => {
     <Popover className="relative z-10">
       {({ open }) => (
         <>
-          <Popover.Button className="btn">
+          <Popover.Button className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold transition-all rounded-lg border border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/5 outline-none focus:ring-2 focus:ring-primary/20 transition-colors">
             Popover Button
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -33,9 +33,9 @@ const ButtonPopover = () => {
             leaveTo="transform scale-95 opacity-0"
           >
             <Popover.Panel className="absolute left-0 z-10 mt-3 w-screen max-w-full sm:max-w-sm lg:max-w-2xl transform">
-              <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-base-content ring-opacity-5">
-                <div className="relative grid gap-4 bg-base-100 p-4 lg:grid-cols-2">
-                  <div className="text-sm flex items-center gap-3 p-2 cursor-pointer hover:bg-base-200 rounded-lg duration-200">
+              <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black/5 dark:ring-white/10">
+                <div className="relative grid gap-4 bg-white dark:bg-slate-900 p-4 lg:grid-cols-2">
+                  <div className="text-sm flex items-center gap-3 p-2 cursor-pointer hover:bg-black/5 dark:hover:bg-white/5 rounded-lg duration-200">
                     <span className="flex items-center justify-center w-12 h-12 shrink-0 rounded-lg bg-orange-500/20">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -64,7 +64,7 @@ const ButtonPopover = () => {
                       </p>
                     </div>
                   </div>
-                  <div className="text-sm flex items-center gap-3 p-2 cursor-pointer hover:bg-base-200 rounded-lg duration-200">
+                  <div className="text-sm flex items-center gap-3 p-2 cursor-pointer hover:bg-black/5 dark:hover:bg-white/5 rounded-lg duration-200">
                     <span className="flex items-center justify-center w-12 h-12 shrink-0 rounded-lg bg-yellow-500/20">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -88,7 +88,7 @@ const ButtonPopover = () => {
                       </p>
                     </div>
                   </div>
-                  <div className="text-sm flex items-center gap-3 p-2 cursor-pointer hover:bg-base-200 rounded-lg duration-200">
+                  <div className="text-sm flex items-center gap-3 p-2 cursor-pointer hover:bg-black/5 dark:hover:bg-white/5 rounded-lg duration-200">
                     <span className="flex items-center justify-center w-12 h-12 shrink-0 rounded-lg bg-green-500/20">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"

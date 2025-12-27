@@ -23,7 +23,7 @@ import config from "@/config";
 // - Governing Law: France
 // - Updates to the Terms: users will be updated by email
 
-// Please write a simple Terms & Services for my site. Add the current date. Do not add or explain your reasoning. Answer:
+// Please write a simple Terms & Services for my site. Add the current date.  Do not add or explain your reasoning. Answer:
 
 export const metadata = getSEOTags({
   title: `Terms and Conditions | ${config.appName}`,
@@ -32,14 +32,17 @@ export const metadata = getSEOTags({
 
 const TOS = () => {
   return (
-    <main className="max-w-xl mx-auto">
-      <div className="p-5">
-        <Link href="/" className="btn btn-ghost">
+    <main className="max-w-3xl mx-auto p-8 md:p-16 bg-white dark:bg-[#050505] min-h-screen">
+      <div className="space-y-12">
+        <Link 
+          href="/" 
+          className="inline-flex items-center gap-2 px-4 py-2 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-950 dark:text-slate-400 dark:hover:text-white transition-colors rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 outline-none"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
             fill="currentColor"
-            className="w-5 h-5"
+            className="w-4 h-4"
           >
             <path
               fillRule="evenodd"
@@ -49,13 +52,12 @@ const TOS = () => {
           </svg>
           Back
         </Link>
-        <h1 className="text-3xl font-extrabold pb-6">
-          Terms and Conditions for {config.appName}
+        <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-slate-950 dark:text-white leading-none">
+          Terms and Conditions
         </h1>
 
         <pre
-          className="leading-relaxed whitespace-pre-wrap"
-          style={{ fontFamily: "sans-serif" }}
+          className="leading-relaxed whitespace-pre-wrap text-sm font-medium text-slate-600 dark:text-slate-400 font-sans border-l-4 border-slate-100 dark:border-white/5 pl-8 py-4"
         >
           {`Last Updated: September 26, 2023
 

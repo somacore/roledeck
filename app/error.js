@@ -8,8 +8,8 @@ import ButtonSupport from "@/components/ButtonSupport";
 export default function Error({ error, reset }) {
   return (
     <>
-      <div className="h-screen w-full flex flex-col justify-center items-center text-center gap-6 p-6">
-        <div className="p-6 bg-white rounded-xl">
+      <div className="h-screen w-full flex flex-col justify-center items-center text-center gap-6 p-6 bg-white dark:bg-[#050505]">
+        <div className="p-6 bg-white dark:bg-white/5 rounded-xl shadow-sm border border-black/5 dark:border-white/5">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             data-name="Layer 1"
@@ -124,14 +124,17 @@ export default function Error({ error, reset }) {
           </svg>
         </div>
 
-        <p className="font-medium md:text-xl md:font-semibold">
+        <p className="font-black md:text-xl md:font-semibold uppercase tracking-tighter text-slate-950 dark:text-white">
           Something went wrong 🥲
         </p>
 
-        <p className="text-red-500">{error?.message}</p>
+        <p className="text-red-500 text-sm font-bold uppercase tracking-widest">{error?.message}</p>
 
         <div className="flex flex-wrap gap-4 justify-center">
-          <button className="btn btn-sm" onClick={reset}>
+          <button 
+            className="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-black uppercase tracking-widest transition-colors rounded-lg bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/20 text-slate-900 dark:text-white outline-none cursor-pointer" 
+            onClick={reset}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"
@@ -149,7 +152,10 @@ export default function Error({ error, reset }) {
 
           <ButtonSupport />
 
-          <Link href="/" className="btn btn-sm">
+          <Link 
+            href="/" 
+            className="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-black uppercase tracking-widest transition-colors rounded-lg bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/20 text-slate-900 dark:text-white outline-none cursor-pointer"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"

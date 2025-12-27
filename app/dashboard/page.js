@@ -87,7 +87,7 @@ export default function DashboardPage() {
               <div className="space-y-1">
                 <div className="flex items-center gap-3">
                   <h3 className="text-xl font-black uppercase tracking-tight text-slate-950 dark:text-white">
-                    {deck.is_public ? "Main Deck" : deck.company}
+                    {deck.is_public ? "Main Deck" : deck.company} - {deck.slug}
                   </h3>
                   {deck.is_public && (
                     <span className="px-2 py-0.5 bg-[#a855f7] text-white text-[8px] font-black uppercase tracking-widest rounded shadow-sm">
@@ -97,7 +97,7 @@ export default function DashboardPage() {
                 </div>
                 
                 <p className="text-[10px] font-black uppercase tracking-widest text-[#a855f7]">
-                  {brandedIdentity}{!deck.is_public && `/t/${deck.company.replace(/\s+/g, '-').toLowerCase()}`}
+                  {brandedIdentity}{!deck.is_public && `/t/${deck.company.replace(/\s+/g, '-').toLowerCase()}/${deck.slug}`}
                 </p>
               </div>
 

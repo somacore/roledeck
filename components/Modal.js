@@ -22,7 +22,7 @@ const Modal = ({ isModalOpen, setIsModalOpen }) => {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-neutral-focus bg-opacity-50" />
+          <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
@@ -36,13 +36,13 @@ const Modal = ({ isModalOpen, setIsModalOpen }) => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="relative w-full max-w-3xl h-full overflow-visible transform text-left align-middle shadow-xl transition-all rounded-xl bg-base-100 p-6 md:p-8">
-                <div className="flex justify-between items-center mb-4">
-                  <Dialog.Title as="h2" className="font-semibold">
+              <Dialog.Panel className="relative w-full max-w-3xl h-full overflow-visible transform text-left align-middle shadow-2xl transition-all rounded-2xl bg-white dark:bg-slate-900 p-6 md:p-8 border border-black/5 dark:border-white/10">
+                <div className="flex justify-between items-center mb-6">
+                  <Dialog.Title as="h2" className="text-xl font-black uppercase tracking-tighter text-slate-900 dark:text-white">
                     I&apos;m a modal
                   </Dialog.Title>
                   <button
-                    className="btn btn-square btn-ghost btn-sm"
+                    className="inline-flex items-center justify-center w-8 h-8 rounded-full transition-colors hover:bg-black/5 dark:hover:bg-white/5 text-slate-400 hover:text-slate-900 dark:hover:text-white"
                     onClick={() => setIsModalOpen(false)}
                   >
                     <svg
@@ -56,7 +56,7 @@ const Modal = ({ isModalOpen, setIsModalOpen }) => {
                   </button>
                 </div>
 
-                <section>And here is my content</section>
+                <section className="text-slate-600 dark:text-slate-400 font-medium">And here is my content</section>
               </Dialog.Panel>
             </Transition.Child>
           </div>

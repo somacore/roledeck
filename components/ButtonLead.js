@@ -45,18 +45,18 @@ const ButtonLead = ({ extraStyle }) => {
         ref={inputRef}
         autoComplete="email"
         placeholder="tom@cruise.com"
-        className="input input-bordered w-full placeholder:opacity-60"
+        className="w-full bg-transparent border border-slate-200 dark:border-slate-800 px-4 py-3 text-sm transition-all focus:border-primary focus:ring-1 focus:ring-primary outline-none rounded-lg placeholder:opacity-60"
         onChange={(e) => setEmail(e.target.value)}
       />
 
       <button
-        className="btn btn-primary btn-block"
+        className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-bold uppercase tracking-widest transition-all rounded-lg bg-primary text-white hover:opacity-90 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
         type="submit"
-        disabled={isDisabled}
+        disabled={isDisabled || isLoading}
       >
         Join waitlist
         {isLoading ? (
-          <span className="loading loading-spinner loading-xs"></span>
+          <span className="animate-spin rounded-full border-2 border-current border-t-transparent h-3 w-3"></span>
         ) : (
           <svg
             xmlns="http://www.w3.org/2000/svg"

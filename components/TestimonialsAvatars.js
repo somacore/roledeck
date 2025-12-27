@@ -3,7 +3,6 @@ import Image from "next/image";
 const avatars = [
   {
     alt: "User",
-    // Ideally, load from a statically generated image for better SEO performance (import userImage from "@/public/userImage.png")
     src: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3276&q=80",
   },
   {
@@ -26,31 +25,32 @@ const avatars = [
 
 const TestimonialsAvatars = ({ priority = false }) => {
   return (
-    <div className="flex flex-col md:flex-row justify-center items-center md:items-start gap-3">
-      {/* AVATARS */}
-      <div className={`-space-x-5 avatar-group justy-start`}>
+    <div className="flex flex-col md:flex-row justify-center items-center md:items-start gap-4">
+      {/* AVATARS GRID */}
+      <div className="flex -space-x-4 overflow-hidden">
         {avatars.map((image, i) => (
-          <div className="avatar w-12 h-12" key={i}>
+          <div className="relative inline-block w-12 h-12" key={i}>
             <Image
               src={image.src}
               alt={image.alt}
               priority={priority}
-              width={50}
-              height={50}
+              width={48}
+              height={48}
+              className="inline-block h-12 w-12 rounded-full ring-2 ring-white dark:ring-black object-cover grayscale hover:grayscale-0 transition-all duration-300 shadow-md"
             />
           </div>
         ))}
       </div>
 
-      {/* RATING */}
+      {/* RATING SECTION */}
       <div className="flex flex-col justify-center items-center md:items-start gap-1">
-        <div className="rating">
+        <div className="flex items-center gap-0.5">
           {[...Array(5)].map((_, i) => (
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"
               fill="currentColor"
-              className="w-5 h-5 text-yellow-500"
+              className="w-4 h-4 text-yellow-500 drop-shadow-sm"
               key={i}
             >
               <path
@@ -62,9 +62,8 @@ const TestimonialsAvatars = ({ priority = false }) => {
           ))}
         </div>
 
-        <div className="text-base text-base-content/80">
-          <span className="font-semibold text-base-content">32</span> makers
-          ship faster
+        <div className="text-[10px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-400">
+          <span className="text-slate-900 dark:text-white text-xs mr-1">32</span> makers ship faster
         </div>
       </div>
     </div>

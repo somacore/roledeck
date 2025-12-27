@@ -52,12 +52,12 @@ export default function Login() {
   return (
     <main className="p-8 md:p-24" data-theme={config.colors.theme}>
       <div className="text-center mb-4">
-        <Link href="/" className="btn btn-ghost btn-sm">
+        <Link href="/" className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-semibold transition-colors rounded-md hover:bg-black/5 dark:hover:bg-white/5 text-slate-600 dark:text-slate-400">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
             fill="currentColor"
-            className="w-5 h-5"
+            className="w-4 h-4"
           >
             <path
               fillRule="evenodd"
@@ -68,24 +68,24 @@ export default function Login() {
           Home
         </Link>
       </div>
-      <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-center mb-12">
+      <h1 className="text-3xl md:text-4xl font-black tracking-tighter text-center mb-12 uppercase text-slate-900 dark:text-white">
         Sign-in to {config.appName}{" "}
       </h1>
 
       <div className="space-y-8 max-w-xl mx-auto">
         <button
-          className="btn btn-block"
+          className="w-full inline-flex items-center justify-center gap-3 px-6 py-3 text-sm font-bold transition-all rounded-lg border border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/5 outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
           onClick={(e) =>
             handleSignup(e, { type: "oauth", provider: "google" })
           }
           disabled={isLoading}
         >
           {isLoading ? (
-            <span className="loading loading-spinner loading-xs"></span>
+            <span className="animate-spin rounded-full border-2 border-current border-t-transparent h-4 w-4"></span>
           ) : (
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="w-6 h-6"
+              className="w-5 h-5"
               viewBox="0 0 48 48"
             >
               <path
@@ -109,12 +109,14 @@ export default function Login() {
           Sign-up with Google
         </button>
 
-        <div className="divider text-xs text-base-content/50 font-medium">
-          OR
+        <div className="relative flex items-center py-4">
+          <div className="flex-grow border-t border-slate-200 dark:border-white/10"></div>
+          <span className="flex-shrink mx-4 text-[10px] font-black uppercase tracking-widest text-slate-400">OR</span>
+          <div className="flex-grow border-t border-slate-200 dark:border-white/10"></div>
         </div>
 
         <form
-          className="form-control w-full space-y-4"
+          className="flex flex-col w-full space-y-4"
           onSubmit={(e) => handleSignup(e, { type: "magic_link" })}
         >
           <input
@@ -123,17 +125,17 @@ export default function Login() {
             value={email}
             autoComplete="email"
             placeholder="tom@cruise.com"
-            className="input input-bordered w-full placeholder:opacity-60"
+            className="w-full bg-transparent border border-slate-200 dark:border-white/10 px-4 py-3 text-sm transition-all focus:border-primary focus:ring-1 focus:ring-primary outline-none rounded-lg placeholder:opacity-40"
             onChange={(e) => setEmail(e.target.value)}
           />
 
           <button
-            className="btn btn-primary btn-block"
+            className="w-full inline-flex items-center justify-center px-6 py-3 text-sm font-bold uppercase tracking-widest transition-all rounded-lg bg-primary text-white hover:opacity-90 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             disabled={isLoading || isDisabled}
             type="submit"
           >
             {isLoading && (
-              <span className="loading loading-spinner loading-xs"></span>
+              <span className="animate-spin rounded-full border-2 border-current border-t-transparent h-3 w-3 mr-2"></span>
             )}
             Send Magic Link
           </button>

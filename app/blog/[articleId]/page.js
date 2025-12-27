@@ -77,14 +77,14 @@ export default async function Article({ params }) {
       <div>
         <Link
           href="/blog"
-          className="link !no-underline text-base-content/80 hover:text-base-content inline-flex items-center gap-1"
+          className="inline-flex items-center gap-1 text-sm font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 hover:text-primary transition-colors group"
           title="Back to Blog"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
             fill="currentColor"
-            className="w-5 h-5"
+            className="w-4 h-4 transition-transform group-hover:-translate-x-1"
           >
             <path
               fillRule="evenodd"
@@ -98,16 +98,18 @@ export default async function Article({ params }) {
 
       <article>
         {/* HEADER WITH CATEGORIES AND DATE AND TITLE */}
-        <section className="my-12 md:my-20 max-w-[800px]">
-          <div className="flex items-center gap-4 mb-6">
-            {article.categories.map((category) => (
-              <BadgeCategory
-                category={category}
-                key={category.slug}
-                extraStyle="!badge-lg"
-              />
-            ))}
-            <span className="text-base-content/80" itemProp="datePublished">
+        <section className="my-12 md:my-20 max-w-[800px] text-left">
+          <div className="flex items-center gap-6 mb-8">
+            <div className="flex gap-2">
+              {article.categories.map((category) => (
+                <BadgeCategory
+                  category={category}
+                  key={category.slug}
+                  extraStyle="px-3 py-1 text-[10px]"
+                />
+              ))}
+            </div>
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400" itemProp="datePublished">
               {new Date(article.publishedAt).toLocaleDateString("en-US", {
                 month: "long",
                 day: "numeric",
@@ -116,42 +118,42 @@ export default async function Article({ params }) {
             </span>
           </div>
 
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-6 md:mb-8">
+          <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-slate-950 dark:text-white uppercase leading-[0.9] mb-8">
             {article.title}
           </h1>
 
-          <p className="text-base-content/80 md:text-lg max-w-[700px]">
+          <p className="text-lg md:text-xl font-medium text-slate-600 dark:text-slate-400 leading-relaxed max-w-[700px]">
             {article.description}
           </p>
         </section>
 
-        <div className="flex flex-col md:flex-row">
+        <div className="flex flex-col md:flex-row gap-12">
           {/* SIDEBAR WITH AUTHORS AND 3 RELATED ARTICLES */}
-          <section className="max-md:pb-4 md:pl-12 max-md:border-b md:border-l md:order-last md:w-72 shrink-0 border-base-content/10">
-            <p className="text-base-content/80 text-sm mb-2 md:mb-3">
+          <section className="max-md:pb-12 md:pl-12 max-md:border-b md:border-l border-slate-100 dark:border-white/5 md:order-last md:w-80 shrink-0 text-left">
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-6">
               Posted by
             </p>
             <Avatar article={article} />
 
             {articlesRelated.length > 0 && (
-              <div className="hidden md:block mt-12">
-                <p className=" text-base-content/80 text-sm  mb-2 md:mb-3">
+              <div className="hidden md:block mt-16 space-y-8">
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
                   Related reading
                 </p>
-                <div className="space-y-2 md:space-y-5">
+                <div className="space-y-8">
                   {articlesRelated.map((article) => (
-                    <div className="" key={article.slug}>
-                      <p className="mb-0.5">
+                    <div className="group" key={article.slug}>
+                      <p className="mb-2">
                         <Link
                           href={`/blog/${article.slug}`}
-                          className="link link-hover hover:link-primary font-medium"
+                          className="text-sm font-black uppercase tracking-tight text-slate-950 dark:text-white hover:text-primary transition-colors"
                           title={article.title}
                           rel="bookmark"
                         >
                           {article.title}
                         </Link>
                       </p>
-                      <p className="text-base-content/80 max-w-full text-sm">
+                      <p className="text-xs font-medium leading-relaxed text-slate-500 dark:text-slate-400 line-clamp-2">
                         {article.description}
                       </p>
                     </div>
@@ -162,7 +164,7 @@ export default async function Article({ params }) {
           </section>
 
           {/* ARTICLE CONTENT */}
-          <section className="w-full max-md:pt-4 md:pr-20 space-y-12 md:space-y-20">
+          <section className="w-full max-md:pt-4 md:pr-20 space-y-12 md:space-y-20 text-left">
             {article.content}
           </section>
         </div>

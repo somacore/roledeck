@@ -83,7 +83,7 @@ const ClientLayout = ({ children }) => {
       {/* Show tooltips if any JSX elements has these 2 attributes: data-tooltip-id="tooltip" data-tooltip-content="" */}
       <Tooltip
         id="tooltip"
-        className="z-[60] !opacity-100 max-w-sm shadow-lg"
+        className="z-[60] !opacity-100 max-w-sm shadow-lg rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900 px-3 py-2 text-xs font-medium text-slate-900 dark:text-white"
       />
 
       {/* Set Crisp customer chat support */}

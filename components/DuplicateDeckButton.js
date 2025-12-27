@@ -27,7 +27,7 @@ export default function DuplicateDeckButton({ deck, onComplete }) {
     <>
       <button 
         onClick={() => setIsOpen(true)}
-        className="text-[10px] font-black uppercase tracking-widest text-slate-900 dark:text-white underline decoration-[#a855f7]/40 underline-offset-8 hover:decoration-[#a855f7] cursor-pointer"
+        className="text-[10px] font-black uppercase tracking-widest text-slate-900 dark:text-white underline decoration-[#a855f7]/40 underline-offset-8 hover:decoration-[#a855f7] cursor-pointer transition-all"
       >
         Duplicate
       </button>
@@ -35,13 +35,13 @@ export default function DuplicateDeckButton({ deck, onComplete }) {
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
           <div className="bg-white dark:bg-slate-900 border-4 border-black dark:border-white/20 p-8 max-w-lg w-full shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] dark:shadow-[10px_10px_0px_0px_rgba(255,255,255,0.1)]">
-            <h2 className="text-2xl font-black uppercase tracking-tighter mb-4 text-black dark:text-white">Duplicate Portal</h2>
+            <h2 className="text-2xl font-black uppercase tracking-tighter mb-4 text-black dark:text-white text-left leading-none">Duplicate Portal</h2>
             
             <div className="space-y-4 text-left">
               <div>
                 <label className="block text-[10px] font-black uppercase tracking-widest mb-1 text-slate-400">Target Company</label>
                 <input 
-                  className="w-full border-2 border-black dark:border-white/20 p-3 font-bold text-sm bg-white dark:bg-black text-black dark:text-white focus:border-[#a855f7] outline-none transition-colors" 
+                  className="w-full border-2 border-black dark:border-white/20 p-3 font-bold text-sm bg-white dark:bg-black text-black dark:text-white focus:border-[#a855f7] outline-none transition-colors rounded-none" 
                   value={formData.company} 
                   onChange={e => setFormData({...formData, company: e.target.value})}
                 />
@@ -50,7 +50,7 @@ export default function DuplicateDeckButton({ deck, onComplete }) {
               <div>
                 <label className="block text-[10px] font-black uppercase tracking-widest mb-1 text-slate-400">URL Slug</label>
                 <input 
-                  className="w-full border-2 border-black dark:border-white/20 p-3 font-bold text-sm bg-white dark:bg-black text-black dark:text-white focus:border-[#a855f7] outline-none transition-colors" 
+                  className="w-full border-2 border-black dark:border-white/20 p-3 font-bold text-sm bg-white dark:bg-black text-black dark:text-white focus:border-[#a855f7] outline-none transition-colors rounded-none" 
                   value={formData.slug} 
                   onChange={e => setFormData({...formData, slug: e.target.value})}
                 />
@@ -59,7 +59,7 @@ export default function DuplicateDeckButton({ deck, onComplete }) {
               <div>
                 <label className="block text-[10px] font-black uppercase tracking-widest mb-1 text-slate-400">Tailored Intro</label>
                 <textarea 
-                  className="w-full border-2 border-black dark:border-white/20 p-3 h-32 text-sm bg-white dark:bg-black text-black dark:text-white focus:border-[#a855f7] outline-none transition-colors font-medium" 
+                  className="w-full border-2 border-black dark:border-white/20 p-3 h-32 text-sm bg-white dark:bg-black text-black dark:text-white focus:border-[#a855f7] outline-none transition-colors font-medium resize-none rounded-none" 
                   value={formData.cover_letter} 
                   onChange={e => setFormData({...formData, cover_letter: e.target.value})}
                 />
@@ -69,14 +69,14 @@ export default function DuplicateDeckButton({ deck, onComplete }) {
                 <button 
                   onClick={handleDuplicate} 
                   disabled={loading}
-                  className="flex-1 bg-black dark:bg-white text-white dark:text-black px-6 py-3 text-[10px] font-black uppercase tracking-widest hover:bg-[#a855f7] hover:text-white transition-all disabled:opacity-50 cursor-pointer"
+                  className="flex-1 bg-black dark:bg-white text-white dark:text-black px-6 py-3 text-[10px] font-black uppercase tracking-widest hover:bg-[#a855f7] hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                 >
                   {loading ? "Duplicating..." : "Create Duplicate"}
                 </button>
                 <button 
                   type="button"
                   onClick={() => setIsOpen(false)} 
-                  className="px-6 py-3 text-[10px] font-black uppercase tracking-widest hover:underline text-black dark:text-white cursor-pointer"
+                  className="px-6 py-3 text-[10px] font-black uppercase tracking-widest hover:underline text-black dark:text-white cursor-pointer decoration-transparent hover:decoration-current transition-all"
                 >
                   Cancel
                 </button>

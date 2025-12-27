@@ -34,7 +34,7 @@ const features = [
               {item}
             </li>
           ))}
-          <li className="flex items-center gap-3 text-accent font-medium">
+          <li className="flex items-center gap-3 text-primary font-medium">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"
@@ -95,7 +95,7 @@ const features = [
               {item}
             </li>
           ))}
-          <li className="flex items-center gap-3 text-accent font-medium">
+          <li className="flex items-center gap-3 text-primary font-medium">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"
@@ -158,7 +158,7 @@ const features = [
               {item}
             </li>
           ))}
-          <li className="flex items-center gap-3 text-accent font-medium">
+          <li className="flex items-center gap-3 text-primary font-medium">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"
@@ -218,7 +218,7 @@ const features = [
               </li>
             )
           )}
-          <li className="flex items-center gap-3 text-accent font-medium">
+          <li className="flex items-center gap-3 text-primary font-medium">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"
@@ -282,7 +282,7 @@ const features = [
               {item}
             </li>
           ))}
-          <li className="flex items-center gap-3 text-accent font-medium">
+          <li className="flex items-center gap-3 text-primary font-medium">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"
@@ -344,7 +344,7 @@ const features = [
               {item}
             </li>
           ))}
-          <li className="flex items-center gap-3 text-accent font-medium">
+          <li className="flex items-center gap-3 text-primary font-medium">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"
@@ -432,15 +432,15 @@ const FeaturesListicle = () => {
   return (
     <section className="py-24" id="features">
       <div className="max-w-3xl mx-auto">
-        <div className="bg-base-100 max-md:px-8 max-w-3xl">
-          <p className="text-accent font-medium text-sm font-mono mb-3">
+        <div className="bg-white max-md:px-8 max-w-3xl">
+          <p className="text-primary font-medium text-sm font-mono mb-3">
             const launch_time = &quot;Today&quot;;
           </p>
-          <h2 className="font-extrabold text-3xl lg:text-5xl tracking-tight mb-8">
+          <h2 className="font-extrabold text-3xl lg:text-5xl tracking-tight mb-8 text-slate-900 dark:text-white">
             {/* 💡 COPY TIP: Remind visitors about the value of your product. Why do they need it? */}
             Supercharge your app instantly, launch faster, make $
           </h2>
-          <div className="text-base-content/80 leading-relaxed mb-8 lg:text-lg">
+          <div className="text-slate-600 dark:text-slate-400 leading-relaxed mb-8 lg:text-lg">
             {/* 💡 COPY TIP: Explain how your product delivers what you promise in the headline. */}
             Login users, process payments and send emails at lightspeed. Spend
             your time building your startup, not integrating APIs. ShipFast
@@ -458,22 +458,22 @@ const FeaturesListicle = () => {
                 if (!hasClicked) setHasClicked(true);
                 setFeatureSelected(feature.name);
               }}
-              className={`flex flex-col items-center justify-center gap-3 select-none cursor-pointer p-2 duration-200 group`}
+              className={`flex flex-col items-center justify-center gap-3 select-none cursor-pointer p-2 duration-200 group transition-all`}
             >
               <span
-                className={`duration-100 ${
+                className={`duration-100 transition-colors ${
                   featureSelected === feature.name
                     ? "text-primary"
-                    : "text-base-content/30 group-hover:text-base-content/50"
+                    : "text-slate-400 group-hover:text-slate-600"
                 }`}
               >
                 {feature.svg}
               </span>
               <span
-                className={`font-semibold text-sm ${
+                className={`font-semibold text-sm transition-colors ${
                   featureSelected === feature.name
                     ? "text-primary"
-                    : "text-base-content/50"
+                    : "text-slate-400"
                 }`}
               >
                 {feature.name}
@@ -481,13 +481,13 @@ const FeaturesListicle = () => {
             </span>
           ))}
         </div>
-        <div className="bg-base-200">
+        <div className="bg-slate-50 dark:bg-white/[0.02]">
           <div className="max-w-3xl mx-auto flex flex-col md:flex-row justify-center md:justify-start md:items-center gap-12">
             <div
-              className="text-base-content/80 leading-relaxed space-y-4 px-12 md:px-0 py-12 max-w-xl animate-opacity"
+              className="text-slate-600 dark:text-slate-400 leading-relaxed space-y-4 px-12 md:px-0 py-12 max-w-xl animate-fade-in"
               key={featureSelected}
             >
-              <h3 className="font-semibold text-base-content text-lg">
+              <h3 className="font-semibold text-slate-900 dark:text-white text-lg">
                 {features.find((f) => f.name === featureSelected)["name"]}
               </h3>
 

@@ -34,7 +34,7 @@ const Item = ({ item }) => {
   return (
     <li>
       <button
-        className="relative flex gap-2 items-center w-full py-5 text-base font-semibold text-left border-t md:text-lg border-base-content/10"
+        className="relative flex gap-2 items-center w-full py-5 text-base font-semibold text-left border-t md:text-lg border-black/10 dark:border-white/10"
         onClick={(e) => {
           e.preventDefault();
           setIsOpen(!isOpen);
@@ -42,12 +42,12 @@ const Item = ({ item }) => {
         aria-expanded={isOpen}
       >
         <span
-          className={`flex-1 text-base-content ${isOpen ? "text-primary" : ""}`}
+          className={`flex-1 text-slate-900 dark:text-slate-100 ${isOpen ? "text-primary dark:text-primary" : ""}`}
         >
           {item?.question}
         </span>
         <svg
-          className={`flex-shrink-0 w-4 h-4 ml-auto fill-current`}
+          className={`flex-shrink-0 w-4 h-4 ml-auto fill-current transition-colors ${isOpen ? "text-primary" : "text-slate-400"}`}
           viewBox="0 0 16 16"
           xmlns="http://www.w3.org/2000/svg"
         >
@@ -81,7 +81,7 @@ const Item = ({ item }) => {
             : { maxHeight: 0, opacity: 0 }
         }
       >
-        <div className="pb-5 leading-relaxed">{item?.answer}</div>
+        <div className="pb-5 leading-relaxed text-slate-600 dark:text-slate-400">{item?.answer}</div>
       </div>
     </li>
   );
@@ -89,11 +89,11 @@ const Item = ({ item }) => {
 
 const FAQ = () => {
   return (
-    <section className="bg-base-200" id="faq">
+    <section className="bg-slate-50 dark:bg-white/[0.02]" id="faq">
       <div className="py-24 px-8 max-w-7xl mx-auto flex flex-col md:flex-row gap-12">
         <div className="flex flex-col text-left basis-1/2">
           <p className="inline-block font-semibold text-primary mb-4">FAQ</p>
-          <p className="sm:text-4xl text-3xl font-extrabold text-base-content">
+          <p className="sm:text-4xl text-3xl font-extrabold text-slate-950 dark:text-white">
             Frequently Asked Questions
           </p>
         </div>

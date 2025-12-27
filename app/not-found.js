@@ -5,8 +5,8 @@ import ButtonSupport from "@/components/ButtonSupport";
 // Show a cute SVG with your primary color
 export default function Custom404() {
   return (
-    <section className="relative bg-base-100 text-base-content h-screen w-full flex flex-col justify-center gap-8 items-center p-10">
-      <div className="p-6 bg-white rounded-xl">
+    <section className="relative bg-white dark:bg-[#050505] text-slate-900 dark:text-white h-screen w-full flex flex-col justify-center gap-8 items-center p-10">
+      <div className="p-6 bg-white dark:bg-white/5 rounded-2xl border border-black/5 dark:border-white/5 shadow-sm">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="w-56 h-56"
@@ -95,12 +95,15 @@ export default function Custom404() {
           />
         </svg>
       </div>
-      <p className="text-lg md:text-xl font-semibold">
+      <p className="text-lg md:text-2xl font-black uppercase tracking-tighter">
         This page doesn&apos;t exist 😅
       </p>
 
       <div className="flex flex-wrap gap-4 justify-center">
-        <Link href="/" className="btn btn-sm">
+        <Link 
+          href="/" 
+          className="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-black uppercase tracking-widest transition-colors rounded-lg bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/20 text-slate-900 dark:text-white outline-none cursor-pointer"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"

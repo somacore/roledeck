@@ -3,9 +3,6 @@
 import { useState } from "react";
 
 // The list of tabs to be displayed. It only shows the content of the active tab.
-// - icon is optional
-// - title is required
-// - content is required, it's the content to be displayed when the tab is active
 const tabs = [
 	{
 		id: "1",
@@ -26,27 +23,27 @@ const tabs = [
 			</svg>
 		),
 		content: (
-			<div className="space-y-2">
-				<p>
-					<strong>Device:</strong> iPhone 13 Pro
+			<div className="space-y-4 p-4">
+				<p className="text-sm font-medium text-slate-600 dark:text-slate-400">
+					<strong className="text-slate-900 dark:text-white font-black uppercase tracking-widest text-[10px] mr-2">Device:</strong> iPhone 13 Pro
 				</p>
-				<p>
-					<strong>Screen Size:</strong> 6.1 inches
+				<p className="text-sm font-medium text-slate-600 dark:text-slate-400">
+					<strong className="text-slate-900 dark:text-white font-black uppercase tracking-widest text-[10px] mr-2">Screen Size:</strong> 6.1 inches
 				</p>
-				<p>
-					<strong>Resolution:</strong> 2532 x 1170 pixels
+				<p className="text-sm font-medium text-slate-600 dark:text-slate-400">
+					<strong className="text-slate-900 dark:text-white font-black uppercase tracking-widest text-[10px] mr-2">Resolution:</strong> 2532 x 1170 pixels
 				</p>
-				<p>
-					<strong>Processor:</strong> A15 Bionic chip
+				<p className="text-sm font-medium text-slate-600 dark:text-slate-400">
+					<strong className="text-slate-900 dark:text-white font-black uppercase tracking-widest text-[10px] mr-2">Processor:</strong> A15 Bionic chip
 				</p>
-				<p>
-					<strong>RAM:</strong> 6 GB
+				<p className="text-sm font-medium text-slate-600 dark:text-slate-400">
+					<strong className="text-slate-900 dark:text-white font-black uppercase tracking-widest text-[10px] mr-2">RAM:</strong> 6 GB
 				</p>
-				<p>
-					<strong>Storage:</strong> 256 GB
+				<p className="text-sm font-medium text-slate-600 dark:text-slate-400">
+					<strong className="text-slate-900 dark:text-white font-black uppercase tracking-widest text-[10px] mr-2">Storage:</strong> 256 GB
 				</p>
-				<p>
-					<strong>Battery:</strong> 3095 mAh
+				<p className="text-sm font-medium text-slate-600 dark:text-slate-400">
+					<strong className="text-slate-900 dark:text-white font-black uppercase tracking-widest text-[10px] mr-2">Battery:</strong> 3095 mAh
 				</p>
 			</div>
 		),
@@ -69,27 +66,27 @@ const tabs = [
 			</svg>
 		),
 		content: (
-			<div className="space-y-2">
-				<p>
-					<strong>Device:</strong> iPad Pro (12.9-inch)
+			<div className="space-y-4 p-4">
+				<p className="text-sm font-medium text-slate-600 dark:text-slate-400">
+					<strong className="text-slate-900 dark:text-white font-black uppercase tracking-widest text-[10px] mr-2">Device:</strong> iPad Pro (12.9-inch)
 				</p>
-				<p>
-					<strong>Screen Size:</strong> 12.9 inches
+				<p className="text-sm font-medium text-slate-600 dark:text-slate-400">
+					<strong className="text-slate-900 dark:text-white font-black uppercase tracking-widest text-[10px] mr-2">Screen Size:</strong> 12.9 inches
 				</p>
-				<p>
-					<strong>Resolution:</strong> 2732 x 2048 pixels
+				<p className="text-sm font-medium text-slate-600 dark:text-slate-400">
+					<strong className="text-slate-900 dark:text-white font-black uppercase tracking-widest text-[10px] mr-2">Resolution:</strong> 2732 x 2048 pixels
 				</p>
-				<p>
-					<strong>Processor:</strong> A12X Bionic chip
+				<p className="text-sm font-medium text-slate-600 dark:text-slate-400">
+					<strong className="text-slate-900 dark:text-white font-black uppercase tracking-widest text-[10px] mr-2">Processor:</strong> A12X Bionic chip
 				</p>
-				<p>
-					<strong>RAM:</strong> 4 GB
+				<p className="text-sm font-medium text-slate-600 dark:text-slate-400">
+					<strong className="text-slate-900 dark:text-white font-black uppercase tracking-widest text-[10px] mr-2">RAM:</strong> 4 GB
 				</p>
-				<p>
-					<strong>Storage:</strong> 256 GB
+				<p className="text-sm font-medium text-slate-600 dark:text-slate-400">
+					<strong className="text-slate-900 dark:text-white font-black uppercase tracking-widest text-[10px] mr-2">Storage:</strong> 256 GB
 				</p>
-				<p>
-					<strong>Battery:</strong> 10000 mAh
+				<p className="text-sm font-medium text-slate-600 dark:text-slate-400">
+					<strong className="text-slate-900 dark:text-white font-black uppercase tracking-widest text-[10px] mr-2">Battery:</strong> 10000 mAh
 				</p>
 			</div>
 		),
@@ -112,27 +109,27 @@ const tabs = [
 			</svg>
 		),
 		content: (
-			<div className="space-y-2">
-				<p>
-					<strong>Device:</strong> MacBook Pro (16-inch)
+			<div className="space-y-4 p-4">
+				<p className="text-sm font-medium text-slate-600 dark:text-slate-400">
+					<strong className="text-slate-900 dark:text-white font-black uppercase tracking-widest text-[10px] mr-2">Device:</strong> MacBook Pro (16-inch)
 				</p>
-				<p>
-					<strong>Screen Size:</strong> 16 inches
+				<p className="text-sm font-medium text-slate-600 dark:text-slate-400">
+					<strong className="text-slate-900 dark:text-white font-black uppercase tracking-widest text-[10px] mr-2">Screen Size:</strong> 16 inches
 				</p>
-				<p>
-					<strong>Resolution:</strong> 3072 x 1920 pixels
+				<p className="text-sm font-medium text-slate-600 dark:text-slate-400">
+					<strong className="text-slate-900 dark:text-white font-black uppercase tracking-widest text-[10px] mr-2">Resolution:</strong> 3072 x 1920 pixels
 				</p>
-				<p>
-					<strong>Processor:</strong> Apple M3 chip
+				<p className="text-sm font-medium text-slate-600 dark:text-slate-400">
+					<strong className="text-slate-900 dark:text-white font-black uppercase tracking-widest text-[10px] mr-2">Processor:</strong> Apple M3 chip
 				</p>
-				<p>
-					<strong>RAM:</strong> 16 GB
+				<p className="text-sm font-medium text-slate-600 dark:text-slate-400">
+					<strong className="text-slate-900 dark:text-white font-black uppercase tracking-widest text-[10px] mr-2">RAM:</strong> 16 GB
 				</p>
-				<p>
-					<strong>Storage:</strong> 1 TB
+				<p className="text-sm font-medium text-slate-600 dark:text-slate-400">
+					<strong className="text-slate-900 dark:text-white font-black uppercase tracking-widest text-[10px] mr-2">Storage:</strong> 1 TB
 				</p>
-				<p>
-					<strong>Battery:</strong> 10000 mAh
+				<p className="text-sm font-medium text-slate-600 dark:text-slate-400">
+					<strong className="text-slate-900 dark:text-white font-black uppercase tracking-widest text-[10px] mr-2">Battery:</strong> 10000 mAh
 				</p>
 			</div>
 		),
@@ -143,31 +140,30 @@ const Tabs = () => {
 	const [activeTab, setActiveTab] = useState(tabs[0].id);
 
 	return (
-		<section className="max-w-xl mx-auto space-y-4">
+		<section className="max-w-xl mx-auto space-y-6">
 			{/* TAB HEADER */}
 			<div
-				className="grid rounded-xl bg-base-200 p-1"
+				className="grid rounded-xl bg-slate-100 dark:bg-white/5 p-1 border border-black/5 dark:border-white/5"
 				style={{ gridTemplateColumns: `repeat(${tabs.length}, 1fr)` }}
 			>
 				{tabs.map((tab) => (
-					<a
+					<button
 						key={tab.id}
-						role="tab"
-						className={`flex cursor-pointer select-none items-center justify-center gap-2 rounded-lg py-2 text-sm font-medium ${
+						className={`flex cursor-pointer select-none items-center justify-center gap-2 rounded-lg py-2.5 text-[10px] font-black uppercase tracking-widest transition-all outline-none ${
 							activeTab === tab.id
-								? "animate-opacity bg-base-100 shadow"
-								: "text-base-content/75"
+								? "bg-white dark:bg-white/10 text-primary shadow-sm"
+								: "text-slate-500 dark:text-white/40 hover:text-slate-900 dark:hover:text-white"
 						}`}
 						onClick={() => setActiveTab(tab.id)}
 					>
 						{tab.icon}
 						{tab.title}
-					</a>
+					</button>
 				))}
 			</div>
 
 			{/* TAB CONTENT */}
-			<div className="animate-opacity" key={activeTab}>
+			<div className="animate-fade-in bg-white dark:bg-transparent rounded-2xl transition-all" key={activeTab}>
 				{tabs.find((tab) => tab.id === activeTab).content}
 			</div>
 		</section>

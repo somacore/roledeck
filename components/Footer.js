@@ -8,7 +8,7 @@ import logo from "@/app/icon.png";
 
 const Footer = () => {
   return (
-    <footer className="bg-base-200 border-t border-base-content/10">
+    <footer className="bg-slate-50 dark:bg-black border-t border-slate-200 dark:border-white/5">
       <div className="max-w-7xl mx-auto px-8 py-24">
         <div className=" flex lg:items-start md:flex-row md:flex-nowrap flex-wrap flex-col">
           <div className="w-64 flex-shrink-0 md:mx-0 mx-auto text-center md:text-left">
@@ -25,15 +25,15 @@ const Footer = () => {
                 width={24}
                 height={24}
               />
-              <strong className="font-extrabold tracking-tight text-base md:text-lg">
+              <strong className="font-extrabold tracking-tight text-base md:text-lg text-slate-900 dark:text-white">
                 {config.appName}
               </strong>
             </Link>
 
-            <p className="mt-3 text-sm text-base-content/80">
+            <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">
               {config.appDescription}
             </p>
-            <p className="mt-3 text-sm text-base-content/60">
+            <p className="mt-3 text-sm text-slate-500 dark:text-slate-500">
               Copyright © {new Date().getFullYear()} - All rights reserved
             </p>
 
@@ -41,7 +41,7 @@ const Footer = () => {
               href="https://shipfa.st/?ref=shipfast_badge"
               title="Go to ShipFast"
               target="_blank"
-              className="mt-4 inline-block cursor-pointer rounded bg-neutral px-2 py-1 text-sm text-neutral-content ring-1 ring-base-content/10 duration-200 hover:ring-neutral"
+              className="mt-4 inline-block cursor-pointer rounded bg-slate-900 dark:bg-white px-2 py-1 text-sm text-white dark:text-black ring-1 ring-slate-200 dark:ring-white/10 duration-200 hover:opacity-90"
             >
               <div className="flex items-center gap-1">
                 <span className="opacity-90">Built with</span>
@@ -66,7 +66,7 @@ const Footer = () => {
           </div>
           <div className="flex-grow flex flex-wrap justify-center -mb-10 md:mt-0 mt-10 text-center">
             <div className="lg:w-1/3 md:w-1/2 w-full px-4">
-              <div className="footer-title font-semibold text-base-content tracking-widest text-sm md:text-left mb-3">
+              <div className="text-xs font-bold tracking-widest text-slate-400 uppercase md:text-left mb-3">
                 LINKS
               </div>
 
@@ -75,34 +75,34 @@ const Footer = () => {
                   <a
                     href={`mailto:${config.resend.supportEmail}`}
                     target="_blank"
-                    className="link link-hover"
+                    className="hover:text-primary transition-colors text-slate-600 dark:text-slate-400"
                     aria-label="Contact Support"
                   >
                     Support
                   </a>
                 )}
-                <Link href="/#pricing" className="link link-hover">
+                <Link href="/#pricing" className="hover:text-primary transition-colors text-slate-600 dark:text-slate-400">
                   Pricing
                 </Link>
-                <Link href="/blog" className="link link-hover">
+                <Link href="/blog" className="hover:text-primary transition-colors text-slate-600 dark:text-slate-400">
                   Blog
                 </Link>
-                <a href="/#" target="_blank" className="link link-hover">
+                <a href="/#" target="_blank" className="hover:text-primary transition-colors text-slate-600 dark:text-slate-400">
                   Affiliates
                 </a>
               </div>
             </div>
 
             <div className="lg:w-1/3 md:w-1/2 w-full px-4">
-              <div className="footer-title font-semibold text-base-content tracking-widest text-sm md:text-left mb-3">
+              <div className="text-xs font-bold tracking-widest text-slate-400 uppercase md:text-left mb-3">
                 LEGAL
               </div>
 
               <div className="flex flex-col justify-center items-center md:items-start gap-2 mb-10 text-sm">
-                <Link href="/tos" className="link link-hover">
+                <Link href="/tos" className="hover:text-primary transition-colors text-slate-600 dark:text-slate-400">
                   Terms of services
                 </Link>
-                <Link href="/privacy-policy" className="link link-hover">
+                <Link href="/privacy-policy" className="hover:text-primary transition-colors text-slate-600 dark:text-slate-400">
                   Privacy policy
                 </Link>
               </div>

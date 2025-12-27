@@ -1,7 +1,7 @@
 const Arrow = ({ extraStyle }) => {
   return (
     <svg
-      className={`shrink-0 w-12 fill-neutral-content opacity-70 ${extraStyle}`}
+      className={`shrink-0 w-12 fill-white dark:fill-black opacity-30 ${extraStyle}`}
       viewBox="0 0 138 138"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -23,42 +23,34 @@ const Arrow = ({ extraStyle }) => {
 };
 const Step = ({ emoji, text }) => {
   return (
-    <div className="w-full md:w-48 flex flex-col gap-2 items-center justify-center">
-      <span className="text-4xl">{emoji}</span>
-      <h3 className="font-bold">{text}</h3>
+    <div className="w-full md:w-48 flex flex-col gap-4 items-center justify-center">
+      <span className="text-6xl drop-shadow-xl">{emoji}</span>
+      <h3 className="font-black uppercase tracking-tighter text-lg">{text}</h3>
     </div>
   );
 };
 
 // Problem Agitation: A crucial, yet overlooked, component for a landing page that sells.
-// It goes under your Hero section, and above your Features section.
-// Your Hero section makes a promise to the customer: "Our product will help you achieve XYZ".
-// Your Problem section explains what happens to the customer if its problem isn't solved.
-// The copy should NEVER mention your product. Instead, it should dig the emotional outcome of not fixing a problem.
-// For instance:
-// - Hero: "ShipFast helps developers launch startups fast"
-// - Problem Agitation: "Developers spend too much time adding features, get overwhelmed, and quit." (not about ShipFast at all)
-// - Features: "ShipFast has user auth, Stripe, emails all set up for you"
 const Problem = () => {
   return (
-    <section className="bg-neutral text-neutral-content">
-      <div className="max-w-7xl mx-auto px-8 py-16 md:py-32 text-center">
-        <h2 className="max-w-3xl mx-auto font-extrabold text-4xl md:text-5xl tracking-tight mb-6 md:mb-8">
+    <section className="bg-slate-950 dark:bg-white text-white dark:text-slate-950">
+      <div className="max-w-7xl mx-auto px-8 py-24 md:py-40 text-center">
+        <h2 className="max-w-4xl mx-auto font-black text-4xl md:text-7xl tracking-tighter uppercase leading-[0.9] mb-8">
           80% of startups fail because founders never launch
         </h2>
-        <p className="max-w-xl mx-auto text-lg opacity-90 leading-relaxed mb-12 md:mb-20">
+        <p className="max-w-xl mx-auto text-lg md:text-xl font-medium opacity-60 leading-relaxed mb-16 md:mb-24">
           Emails, DNS records, user authentication... There&apos;s so much going
           on.
         </p>
 
-        <div className="flex flex-col md:flex-row justify-center items-center md:items-start gap-6">
+        <div className="flex flex-col md:flex-row justify-center items-center md:items-start gap-12 md:gap-8">
           <Step emoji="🧑‍💻" text="8 hrs to add Stripe" />
 
-          <Arrow extraStyle="max-md:-scale-x-100 md:-rotate-90" />
+          <Arrow extraStyle="max-md:rotate-90 md:-rotate-90 opacity-20" />
 
           <Step emoji="😮‍💨" text="Struggle to find time" />
 
-          <Arrow extraStyle="md:-scale-x-100 md:-rotate-90" />
+          <Arrow extraStyle="max-md:rotate-90 md:-rotate-90 opacity-20" />
 
           <Step emoji="😔" text="Quit project" />
         </div>

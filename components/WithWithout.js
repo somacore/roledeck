@@ -3,19 +3,19 @@
 // Try to match the lines from left to right, so the user can easily compare the two columns
 const WithWithout = () => {
   return (
-    <section className="bg-base-100">
+    <section className="bg-white dark:bg-transparent">
       <div className="max-w-5xl mx-auto px-8 py-16 md:py-32 ">
-        <h2 className="text-center font-extrabold text-3xl md:text-5xl tracking-tight mb-12 md:mb-20">
+        <h2 className="text-center font-black text-3xl md:text-6xl tracking-tighter text-slate-950 dark:text-white uppercase leading-none mb-12 md:mb-24">
           Tired of managing Stripe invoices?
         </h2>
 
         <div className="flex flex-col md:flex-row justify-center items-center md:items-start gap-8 md:gap-12">
-          <div className="bg-error/20 text-error p-8 md:p-12 rounded-lg w-full ">
-            <h3 className="font-bold text-lg mb-4">
+          <div className="bg-red-500/10 text-red-600 dark:text-red-400 p-8 md:p-12 rounded-[2rem] w-full border border-red-500/10">
+            <h3 className="font-black uppercase tracking-widest text-sm mb-8">
               Stripe invoices without ZenVoice
             </h3>
 
-            <ul className="list-disc list-inside space-y-1.5 ">
+            <ul className="space-y-4">
               {/* Pains the user is experiencing by not using your product */}
               {[
                 "Manually create invoices",
@@ -24,12 +24,12 @@ const WithWithout = () => {
                 "Can’t update details once sent (VAT, Tax ID)",
                 "Can't make invoices for previous purchases",
               ].map((item, index) => (
-                <li key={index} className="flex gap-2 items-center">
+                <li key={index} className="flex gap-3 items-center text-sm font-bold uppercase tracking-tight">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 16 16"
                     fill="currentColor"
-                    className="w-4 h-4 shrink-0 opacity-75"
+                    className="w-4 h-4 shrink-0 opacity-70"
                   >
                     <path d="M5.28 4.22a.75.75 0 0 0-1.06 1.06L6.94 8l-2.72 2.72a.75.75 0 1 0 1.06 1.06L8 9.06l2.72 2.72a.75.75 0 1 0 1.06-1.06L9.06 8l2.72-2.72a.75.75 0 0 0-1.06-1.06L8 6.94 5.28 4.22Z" />
                   </svg>
@@ -39,12 +39,12 @@ const WithWithout = () => {
             </ul>
           </div>
 
-          <div className="bg-success/20 text-success p-8 md:p-12 rounded-lg w-full">
-            <h3 className="font-bold text-lg mb-4">
+          <div className="bg-green-500/10 text-green-600 dark:text-green-400 p-8 md:p-12 rounded-[2rem] w-full border border-green-500/10">
+            <h3 className="font-black uppercase tracking-widest text-sm mb-8">
               Stripe invoices + ZenVoice
             </h3>
 
-            <ul className="list-disc list-inside space-y-1.5 ">
+            <ul className="space-y-4">
               {/* Features of your product fixing the pain (try to match each with/withot lines) */}
               {[
                 "Self-serve invoices",
@@ -53,12 +53,12 @@ const WithWithout = () => {
                 "Editable invoices to stay compliant",
                 "Invoices for any payment, even past ones",
               ].map((item, index) => (
-                <li key={index} className="flex gap-2 items-center">
+                <li key={index} className="flex gap-3 items-center text-sm font-bold uppercase tracking-tight">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 16 16"
                     fill="currentColor"
-                    className="w-4 h-4 shrink-0 opacity-75"
+                    className="w-4 h-4 shrink-0"
                   >
                     <path
                       fillRule="evenodd"

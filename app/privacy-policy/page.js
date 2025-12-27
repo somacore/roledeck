@@ -32,14 +32,17 @@ export const metadata = getSEOTags({
 
 const PrivacyPolicy = () => {
   return (
-    <main className="max-w-xl mx-auto">
-      <div className="p-5">
-        <Link href="/" className="btn btn-ghost">
+    <main className="max-w-3xl mx-auto p-8 md:p-16 bg-white dark:bg-[#050505] min-h-screen">
+      <div className="space-y-12">
+        <Link 
+          href="/" 
+          className="inline-flex items-center gap-2 px-4 py-2 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-950 dark:text-slate-400 dark:hover:text-white transition-colors rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 outline-none"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
             fill="currentColor"
-            className="w-5 h-5"
+            className="w-4 h-4"
           >
             <path
               fillRule="evenodd"
@@ -49,13 +52,12 @@ const PrivacyPolicy = () => {
           </svg>{" "}
           Back
         </Link>
-        <h1 className="text-3xl font-extrabold pb-6">
-          Privacy Policy for {config.appName}
+        <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-slate-950 dark:text-white leading-none">
+          Privacy Policy
         </h1>
 
         <pre
-          className="leading-relaxed whitespace-pre-wrap"
-          style={{ fontFamily: "sans-serif" }}
+          className="leading-relaxed whitespace-pre-wrap text-sm font-medium text-slate-600 dark:text-slate-400 font-sans border-l-4 border-slate-100 dark:border-white/5 pl-8 py-4"
         >
           {`Last Updated: 2023-08-25
 
@@ -71,7 +73,7 @@ We collect the following personal information from you:
 
 Name: We collect your name to personalize your experience and communicate with you effectively.
 Email: We collect your email address to send you important information regarding your orders, updates, and communication.
-Payment Information: We collect payment details to process your orders securely. However, we do not store your payment information on our servers. Payments are processed by trusted third-party payment processors.
+Payment Information: We collect payment details to process your orders securely. However, we do not store your information on our servers. Payments are processed by trusted third-party payment processors.
 
 1.2 Non-Personal Data
 

@@ -25,11 +25,13 @@ const ButtonSignin = ({ text = "Get started", extraStyle }) => {
     getUser();
   }, [supabase]);
 
+  const baseStyles = "inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold transition-all rounded-lg border border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/5 outline-none focus:ring-2 focus:ring-primary/20";
+
   if (user) {
     return (
       <Link
         href={config.auth.callbackUrl}
-        className={`btn ${extraStyle ? extraStyle : ""}`}
+        className={`${baseStyles} ${extraStyle ? extraStyle : ""}`}
       >
         {user?.user_metadata?.avatar_url ? (
           <img
@@ -41,7 +43,7 @@ const ButtonSignin = ({ text = "Get started", extraStyle }) => {
             height={24}
           />
         ) : (
-          <span className="w-6 h-6 bg-base-300 flex justify-center items-center rounded-full shrink-0">
+          <span className="w-6 h-6 bg-black/10 dark:bg-white/10 flex justify-center items-center rounded-full shrink-0 text-xs uppercase">
             {user?.user_metadata?.name?.charAt(0) || user?.email?.charAt(0)}
           </span>
         )}
@@ -52,7 +54,7 @@ const ButtonSignin = ({ text = "Get started", extraStyle }) => {
 
   return (
     <Link
-      className={`btn ${extraStyle ? extraStyle : ""}`}
+      className={`${baseStyles} ${extraStyle ? extraStyle : ""}`}
       href={config.auth.loginUrl}
     >
       {text}

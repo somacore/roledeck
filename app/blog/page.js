@@ -18,16 +18,16 @@ export default async function Blog() {
   return (
     <>
       <section className="text-center max-w-xl mx-auto mt-12 mb-24 md:mb-32">
-        <h1 className="font-extrabold text-3xl lg:text-5xl tracking-tight mb-6">
+        <h1 className="font-black text-4xl lg:text-7xl tracking-tighter text-slate-950 dark:text-white uppercase leading-[0.9] mb-8">
           The {config.appName} Blog
         </h1>
-        <p className="text-lg opacity-80 leading-relaxed">
+        <p className="text-lg md:text-xl font-medium opacity-60 leading-relaxed text-slate-600 dark:text-slate-400">
           Learn how to ship your startup in days, not weeks. And get the latest
           updates about the boilerplate
         </p>
       </section>
 
-      <section className="grid lg:grid-cols-2 mb-24 md:mb-32 gap-8">
+      <section className="grid grid-cols-1 lg:grid-cols-2 mb-24 md:mb-32 gap-8">
         {articlesToDisplay.map((article, i) => (
           <CardArticle
             article={article}
@@ -37,8 +37,8 @@ export default async function Blog() {
         ))}
       </section>
 
-      <section>
-        <p className="font-bold text-2xl lg:text-4xl tracking-tight text-center mb-8 md:mb-12">
+      <section className="space-y-16">
+        <p className="text-2xl md:text-4xl font-black tracking-tighter text-slate-950 dark:text-white uppercase text-center">
           Browse articles by category
         </p>
 

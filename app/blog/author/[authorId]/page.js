@@ -22,42 +22,45 @@ export default async function Author({ params }) {
 
   return (
     <>
-      <section className="max-w-3xl mx-auto flex flex-col md:flex-row gap-8 mt-12 mb-24 md:mb-32">
-        <div>
-          <p className="text-xs uppercase tracking-wide text-base-content/80 mb-2">
+      <section className="max-w-4xl mx-auto flex flex-col md:flex-row gap-12 mt-12 mb-24 md:mb-32 text-left items-start">
+        <div className="flex-1 space-y-6">
+          <p className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">
             Authors
           </p>
-          <h1 className="font-extrabold text-3xl lg:text-5xl tracking-tight mb-2">
+          <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-slate-950 dark:text-white uppercase leading-none">
             {author.name}
           </h1>
-          <p className="md:text-lg mb-6 md:mb-10 font-medium">{author.job}</p>
-          <p className="md:text-lg text-base-content/80">
+          <p className="text-lg font-black uppercase tracking-widest text-slate-400">{author.job}</p>
+          <p className="text-lg font-medium leading-relaxed text-slate-600 dark:text-slate-400">
             {author.description}
           </p>
         </div>
 
-        <div className="max-md:order-first flex md:flex-col gap-4 shrink-0">
-          <Image
-            src={author.avatar}
-            width={256}
-            height={256}
-            alt={author.name}
-            priority={true}
-            className="rounded-box w-[12rem] md:w-[16rem] "
-          />
+        <div className="max-md:order-first flex flex-col gap-6 shrink-0">
+          <div className="relative group">
+            <Image
+              src={author.avatar}
+              width={256}
+              height={256}
+              alt={author.name}
+              priority={true}
+              className="rounded-3xl w-[14rem] md:w-[18rem] grayscale hover:grayscale-0 transition-all duration-500 shadow-2xl border-4 border-white dark:border-black"
+            />
+          </div>
 
           {author.socials?.length > 0 && (
-            <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex gap-3">
               {author.socials.map((social) => (
                 <a
                   key={social.name}
                   href={social.url}
-                  className="btn btn-square"
-                  // Using a dark theme? -> className="btn btn-square btn-neutral"
+                  className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-slate-50 dark:bg-white/5 border border-black/5 dark:border-white/10 transition-all hover:bg-slate-950 dark:hover:bg-white hover:text-white dark:hover:text-black group"
                   title={`Go to ${author.name} profile on ${social.name}`}
                   target="_blank"
                 >
-                  {social.icon}
+                  <div className="w-5 h-5 fill-current opacity-60 group-hover:opacity-100 transition-opacity">
+                    {social.icon}
+                  </div>
                 </a>
               ))}
             </div>
@@ -65,12 +68,12 @@ export default async function Author({ params }) {
         </div>
       </section>
 
-      <section>
-        <h2 className="font-bold text-2xl lg:text-4xl tracking-tight text-center mb-8 md:mb-12">
+      <section className="space-y-16">
+        <h2 className="text-2xl md:text-4xl font-black tracking-tighter text-slate-950 dark:text-white uppercase text-center">
           Most recent articles by {author.name}
         </h2>
 
-        <div className="grid lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {articlesByAuthor.map((article) => (
             <CardArticle key={article.slug} article={article} />
           ))}

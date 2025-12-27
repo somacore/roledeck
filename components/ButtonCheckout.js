@@ -32,14 +32,15 @@ const ButtonCheckout = ({ priceId, mode = "payment" }) => {
 
   return (
     <button
-      className="btn btn-primary btn-block group"
+      className="w-full inline-flex items-center justify-center px-6 py-4 text-[10px] font-black uppercase tracking-[0.2em] transition-all bg-slate-950 dark:bg-white text-white dark:text-black hover:bg-primary hover:text-white disabled:opacity-50 cursor-pointer group"
       onClick={() => handlePayment()}
+      disabled={isLoading}
     >
       {isLoading ? (
-        <span className="loading loading-spinner loading-xs"></span>
+        <span className="animate-spin rounded-full border-2 border-current border-t-transparent h-4 w-4 mr-2"></span>
       ) : (
         <svg
-          className="w-5 h-5 fill-primary-content group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-200"
+          className="w-5 h-5 fill-current group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-200 mr-2"
           viewBox="0 0 375 509"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"

@@ -29,21 +29,21 @@ export default async function Category({ params }) {
 
   return (
     <>
-      <section className="mt-12 mb-24 md:mb-32 max-w-3xl mx-auto text-center">
-        <h1 className="font-extrabold text-3xl lg:text-5xl tracking-tight mb-6 md:mb-12">
+      <section className="mt-12 mb-24 md:mb-32 max-w-3xl mx-auto text-center space-y-8">
+        <h1 className="font-black text-4xl lg:text-7xl tracking-tighter text-slate-950 dark:text-white uppercase leading-[0.9]">
           {category.title}
         </h1>
-        <p className="md:text-lg opacity-80 max-w-xl mx-auto">
+        <p className="text-lg md:text-xl font-medium opacity-60 leading-relaxed text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
           {category.description}
         </p>
       </section>
 
-      <section className="mb-24">
-        <h2 className="font-bold text-2xl lg:text-4xl tracking-tight text-center mb-8 md:mb-12">
+      <section className="mb-24 space-y-16">
+        <h2 className="text-2xl md:text-4xl font-black tracking-tighter text-slate-950 dark:text-white uppercase text-center">
           Most recent articles in {category.title}
         </h2>
 
-        <div className="grid lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {articlesInCategory.map((article) => (
             <CardArticle
               key={article.slug}
@@ -55,8 +55,8 @@ export default async function Category({ params }) {
         </div>
       </section>
 
-      <section>
-        <h2 className="font-bold text-2xl lg:text-4xl tracking-tight text-center mb-8 md:mb-12">
+      <section className="space-y-16">
+        <h2 className="text-2xl md:text-4xl font-black tracking-tighter text-slate-950 dark:text-white uppercase text-center">
           Other categories you might like
         </h2>
 
