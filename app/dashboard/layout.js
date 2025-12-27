@@ -17,6 +17,7 @@ export default function DashboardLayout({ children }) {
 
   useEffect(() => {
     async function fetchData() {
+      if (!supabase) return;
       const { data: { user: authUser } } = await supabase.auth.getUser();
       if (authUser) {
         setUser(authUser);
