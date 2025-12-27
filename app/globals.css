@@ -38,17 +38,17 @@
 }
 
 /* Tailwind Components Layer: 
-  Replaces DaisyUI component classes with custom utility-based definitions.
+  Custom utility-based component definitions using Tailwind 4.
 */
 @layer components {
 
-  /* Form Element Component - Replaces DaisyUI 'input' and 'textarea' */
+  /* Form Element Component - Custom input and textarea styling */
   input,
   textarea {
     @apply bg-transparent border border-slate-200 dark:border-slate-800 px-4 py-3 text-sm transition-all focus:border-primary focus:ring-1 focus:ring-primary outline-none;
   }
 
-  /* Custom Button Gradient - Replaces the need for a DaisyUI plugin for specific button styles */
+  /* Custom Button Gradient - Gradient button utility class */
   .btn-gradient {
     background: var(--color-gradient);
     background-size: 200% auto;
@@ -58,7 +58,7 @@
     filter: saturate(1.2);
   }
 
-  /* Checkbox styling - Replaces DaisyUI 'checkbox' */
+  /* Checkbox styling - Custom checkbox styling */
   input[type="checkbox"] {
     @apply accent-primary w-4 h-4 cursor-pointer rounded border-slate-300 dark:border-slate-700;
   }
