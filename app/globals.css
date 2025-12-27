@@ -3,9 +3,28 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
+  /* Branding Colors */
   --color-primary: #7c3aed;
+
+  /* Typography */
   --font-sans: "Inter", "System-ui", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
+
+  /* Custom Gradient for RoleDeck identity */
+  --color-gradient: linear-gradient(60deg, #f79533, #f37055, #ef4e7b, #a166ab, #5073b8, #1098ad, #07b39b, #6fba82);
+
+  /* Animations for shimmer effects used in buttons */
+  @keyframes shimmer {
+    from {
+      background-position: 0% 50%;
+    }
+
+    to {
+      background-position: 100% 50%;
+    }
+  }
+
+  --animate-shimmer: shimmer 3s ease infinite;
 }
 
 @layer base {
@@ -18,11 +37,44 @@
   }
 }
 
-/* Sharp, professional focus states */
+/* Tailwind Components Layer: 
+  Replaces DaisyUI component classes with custom utility-based definitions.
+*/
 @layer components {
 
+  /* Form Element Component - Replaces DaisyUI 'input' and 'textarea' */
   input,
   textarea {
     @apply bg-transparent border border-slate-200 dark:border-slate-800 px-4 py-3 text-sm transition-all focus:border-primary focus:ring-1 focus:ring-primary outline-none;
+  }
+
+  /* Custom Button Gradient - Replaces the need for a DaisyUI plugin for specific button styles */
+  .btn-gradient {
+    background: var(--color-gradient);
+    background-size: 200% auto;
+  }
+
+  .btn-gradient:hover {
+    filter: saturate(1.2);
+  }
+
+  /* Checkbox styling - Replaces DaisyUI 'checkbox' */
+  input[type="checkbox"] {
+    @apply accent-primary w-4 h-4 cursor-pointer rounded border-slate-300 dark:border-slate-700;
+  }
+}
+
+/* Fade-in Utility for interactive elements */
+@utility animate-fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
   }
 }

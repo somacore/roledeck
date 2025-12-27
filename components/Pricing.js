@@ -7,11 +7,11 @@ import ButtonCheckout from "./ButtonCheckout";
 
 const Pricing = () => {
   return (
-    <section className="bg-slate-50 dark:bg-[#0a0a0a] overflow-hidden" id="pricing">
+    <section className="bg-slate-50 dark:bg-[#080808] overflow-hidden" id="pricing">
       <div className="py-24 px-8 max-w-5xl mx-auto">
         <div className="flex flex-col text-center w-full mb-20 space-y-4">
           <p className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Pricing</p>
-          <h2 className="text-4xl md:text-6xl font-black tracking-tighter text-slate-900 dark:text-white uppercase leading-none">
+          <h2 className="text-4xl md:text-6xl font-black tracking-tighter text-slate-950 dark:text-white uppercase leading-none">
             Save hours of repetitive code and ship faster!
           </h2>
         </div>
@@ -31,14 +31,14 @@ const Pricing = () => {
 
               {plan.isFeatured && (
                 <div
-                  className="absolute -inset-[2px] rounded-[18px] bg-primary opacity-20 z-0"
+                  className="absolute -inset-[2px] rounded-[24px] bg-primary opacity-10 z-0"
                 ></div>
               )}
 
-              <div className="relative flex flex-col h-full gap-5 lg:gap-8 z-10 bg-white dark:bg-white/[0.02] p-10 rounded-2xl border border-black/5 dark:border-white/5 shadow-sm hover:shadow-xl transition-all">
+              <div className="relative flex flex-col h-full gap-5 lg:gap-8 z-10 bg-white dark:bg-white/[0.02] p-10 rounded-3xl border border-black/5 dark:border-white/5 shadow-sm transition-all hover:shadow-xl">
                 <div className="flex justify-between items-center gap-4 text-left">
                   <div>
-                    <p className="text-2xl font-black uppercase tracking-tighter text-slate-900 dark:text-white leading-none">{plan.name}</p>
+                    <p className="text-2xl font-black uppercase tracking-tighter text-slate-950 dark:text-white leading-none">{plan.name}</p>
                     {plan.description && (
                       <p className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mt-2 leading-relaxed">
                         {plan.description}
@@ -48,7 +48,7 @@ const Pricing = () => {
                 </div>
                 <div className="flex items-end gap-2">
                   {plan.priceAnchor && (
-                    <div className="flex flex-col justify-end mb-[6px] text-lg">
+                    <div className="flex flex-col justify-end mb-[6px] text-lg ">
                       <p className="relative">
                         <span className="absolute bg-slate-300 dark:bg-slate-700 h-[2px] inset-x-0 top-[53%] transform -rotate-6"></span>
                         <span className="text-slate-300 dark:text-slate-600 font-bold">
@@ -67,7 +67,7 @@ const Pricing = () => {
                   </div>
                 </div>
                 {plan.features && (
-                  <ul className="space-y-4 text-sm flex-1 pt-4 text-left border-t border-black/5 dark:border-white/5">
+                  <ul className="space-y-4 text-sm flex-1 pt-6 text-left border-t border-black/5 dark:border-white/5">
                     {plan.features.map((feature, i) => (
                       <li key={i} className="flex items-center gap-3">
                         <svg
