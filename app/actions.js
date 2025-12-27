@@ -6,108 +6,19 @@ import { createRequire } from "module";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
 const require = createRequire(import.meta.url);
 const pdf = require("pdf-parse-fork");
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-
-/**
- * DECK STUDIO: Deletes a design template.
- */
-export async function deleteTemplate(id) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return { error: true, message: "Unauthorized" };
-
-  const { error } = await supabase
-    .from("templates")
-    .delete()
-    .eq("id", id)
-    .eq("user_id", user.id);
-
-  if (error) return { error: true, message: error.message };
-
-  revalidatePath("/dashboard/studio");
-  return { success: true };
-}
-
-/**
- * DECK STUDIO: Updates the template assigned to a specific deck.
- */
-export async function updateDeckTemplate(deckId, templateId) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return { error: true, message: "Unauthorized" };
-
-  const { error } = await supabase
-    .from("decks")
-    .update({ template_id: templateId || null })
-    .eq("id", deckId)
-    .eq("user_id", user.id);
-
-  if (error) return { error: true, message: error.message };
-
-  revalidatePath("/dashboard");
-  revalidatePath(`/dashboard/${deckId}`);
-  return { success: true };
-}
-
-/**
- * DECK STUDIO: Uploads an image to the private studio-assets bucket.
- */
-export async function uploadStudioAsset(formData) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return { error: true, message: "Unauthorized" };
-
-  const file = formData.get("file");
-  if (!file) return { error: true, message: "No file provided" };
-
-  const fileExt = file.name.split('.').pop();
-  const filePath = `${user.id}/${Date.now()}.${fileExt}`;
-
-  const { error } = await supabase.storage
-    .from('studio-assets')
-    .upload(filePath, file);
-
-  if (error) return { error: true, message: error.message };
-
-  return { success: true, path: filePath };
-}
-
-/**
- * DECK STUDIO: Initializes a new design template.
- */
-export async function createTemplate(formData) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  
-  if (!user) return { error: true, message: "Unauthorized" };
-
-  const name = formData.get("name");
-  const config = JSON.parse(formData.get("config") || '{"sections": []}');
-
-  const { data, error } = await supabase
-    .from("templates")
-    .insert([{
-      user_id: user.id,
-      name: name,
-      config: config
-    }])
-    .select()
-    .single();
-
-  if (error) return { error: true, message: error.message };
-  
-  revalidatePath("/dashboard/studio");
-  return { success: true, id: data.id };
-}
 
 /**
  * CORE: Sends the tailored portal link via email.
  */
 export async function sendResumeEmail(recipientEmail, portalUrl, companyName) {
   try {
+    if (!process.env.RESEND_API_KEY) {
+      return { success: false };
+    }
+
+    const resend = new Resend(process.env.RESEND_API_KEY);
     const { data, error } = await resend.emails.send({
       from: 'RoleDeck Portals <portals@roledeck.io>',
       to: [recipientEmail],
@@ -163,6 +74,11 @@ export async function createDeck(formData) {
   let structuredResume = null;
   if (extractedText) {
     try {
+      if (!process.env.GEMINI_API_KEY) {
+        throw new Error("Missing GEMINI_API_KEY");
+      }
+
+      const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
       const model = genAI.getGenerativeModel({ 
         model: "gemini-2.5-flash", 
         generationConfig: { responseMimeType: "application/json" } 

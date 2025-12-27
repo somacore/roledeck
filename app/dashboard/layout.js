@@ -17,6 +17,7 @@ export default function DashboardLayout({ children }) {
 
   useEffect(() => {
     async function fetchData() {
+      if (!supabase) return;
       const { data: { user: authUser } } = await supabase.auth.getUser();
       if (authUser) {
         setUser(authUser);
@@ -63,18 +64,6 @@ export default function DashboardLayout({ children }) {
               }`}
             >
               Decks
-            </Link>
-
-            {/* DECK STUDIO - NEW TOP LEVEL SECTION */}
-            <Link 
-              href="/dashboard/studio" 
-              className={`block px-4 py-3 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all ${
-                pathname.startsWith("/dashboard/studio") 
-                  ? "bg-white dark:bg-white/5 shadow-sm dark:shadow-none text-primary border-l-2 border-primary" 
-                  : "text-slate-500 hover:text-slate-900 dark:text-white/40 dark:hover:text-white"
-              }`}
-            >
-              Deck Studio
             </Link>
           </div>
 

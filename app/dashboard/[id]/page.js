@@ -1,13 +1,13 @@
 import { createClient } from "@/libs/supabase/server";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { deleteDeck, updateDeckTemplate } from "@/app/actions";
+import { deleteDeck } from "@/app/actions";
 
 export default async function DeckViewPage({ params }) {
   const { id } = await params;
   const supabase = await createClient();
 
-  // 1. Fetch current deck and all design templates
+  // 1. Fetch current deck
   const { data: deck } = await supabase
     .from("decks")
     .select("*")
@@ -15,11 +15,6 @@ export default async function DeckViewPage({ params }) {
     .single();
 
   if (!deck) return notFound();
-
-  const { data: templates } = await supabase
-    .from("templates")
-    .select("id, name")
-    .order("name", { ascending: true });
 
   return (
     <main className="min-h-screen p-8 text-left bg-white dark:bg-[#050505] animate-fade-in">
@@ -62,41 +57,6 @@ export default async function DeckViewPage({ params }) {
             Deployed on {new Date(deck.created_at).toLocaleDateString()}
           </p>
         </header>
-
-        {/* DESIGN IDENTITY SECTION: This is where you assign Studio designs */}
-        <section className="bg-slate-50 dark:bg-white/[0.02] p-10 rounded-[2rem] border border-black/5 dark:border-white/5 shadow-sm space-y-8">
-          <div className="flex items-center gap-4">
-            <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Design Identity</h2>
-            <div className="h-[1px] bg-slate-200 dark:bg-white/5 flex-1" />
-          </div>
-
-          <form action={async (formData) => {
-            "use server";
-            const templateId = formData.get("template_id");
-            await updateDeckTemplate(deck.id, templateId);
-          }} className="space-y-6">
-            <div className="space-y-2">
-              <label className="text-[9px] font-black uppercase tracking-widest opacity-40">Active Studio Template</label>
-              <select 
-                name="template_id" 
-                defaultValue={deck.template_id || ""}
-                className="w-full bg-white dark:bg-black/20 border-none px-4 py-4 text-xs font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-primary outline-none transition-all rounded-none appearance-none cursor-pointer"
-              >
-                <option value="">None (Standard Professional Resume)</option>
-                {templates?.map((t) => (
-                  <option key={t.id} value={t.id}>{t.name}</option>
-                ))}
-              </select>
-            </div>
-            
-            <button 
-              type="submit"
-              className="bg-slate-950 dark:bg-white text-white dark:text-black px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] hover:bg-primary hover:text-white transition-all cursor-pointer shadow-sm"
-            >
-              Apply Design Changes
-            </button>
-          </form>
-        </section>
 
         {/* SOURCE PREVIEW */}
         <section className="bg-slate-50 dark:bg-white/[0.02] p-10 rounded-[2rem] border border-black/5 dark:border-white/5 shadow-sm opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all">

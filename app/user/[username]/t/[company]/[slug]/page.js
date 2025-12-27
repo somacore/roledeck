@@ -6,7 +6,6 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import PrintButton from "@/components/PrintButton";
 import CopyEmailButton from "@/components/CopyEmailButton";
 import SendResumeButton from "@/components/SendResumeButton";
-import StudioRenderer from "@/components/StudioRenderer";
 import { getSEOTags } from "@/libs/seo";
 
 // Initialize Gemini for on-demand restructuring
@@ -46,16 +45,10 @@ export default async function TrackerPage({ params }) {
 
   if (!profile) return notFound();
 
-  // 2. Fetch Deck (Including template data if assigned)
+  // 2. Fetch Deck
   const { data: deck, error: deckError } = await supabase
     .from("decks")
-    .select(`
-      *,
-      templates (
-        id,
-        config
-      )
-    `)
+    .select("*")
     .eq("user_id", profile.id)
     .ilike("company", company)
     .ilike("slug", slug)
@@ -99,23 +92,6 @@ export default async function TrackerPage({ params }) {
     } catch (e) { console.error("On-demand parsing failed"); }
   }
 
-  // 6. Server-Side Studio Asset Signing
-  let signedConfig = deck.templates?.config;
-  if (signedConfig?.sections) {
-    for (let section of signedConfig.sections) {
-      if (section.type === 'gallery' && section.content.images) {
-        for (let img of section.content.images) {
-          if (img.path) {
-            const { data } = await supabaseAdmin.storage
-              .from('studio-assets')
-              .createSignedUrl(img.path, 3600);
-            img.signedUrl = data?.signedUrl;
-          }
-        }
-      }
-    }
-  }
-
   const introText = deck.cover_letter?.content || String(deck.cover_letter || "");
 
   return (
@@ -142,68 +118,61 @@ export default async function TrackerPage({ params }) {
           <PrintButton />
         </div>
 
-        {deck.templates ? (
-          <StudioRenderer 
-            config={signedConfig} 
-            resumeData={resumeData} 
-          />
-        ) : (
-          <>
-            <div className="flex justify-between items-start border-b-4 border-black pb-6 mb-10">
-              <div className="space-y-1">
-                <h1 className="text-5xl font-black uppercase tracking-tighter leading-none">
-                  {resumeData?.full_name || profile.full_name}
-                </h1>
-                <p className="text-xl font-medium text-gray-500">{profile.email}</p>
-              </div>
-              <div className="text-right">
-                <span className="text-[10px] font-black bg-black text-white px-2 py-1 uppercase tracking-widest leading-none">
-                  {company} Portal
-                </span>
-                <p className="text-sm font-bold text-gray-400 uppercase tracking-tighter mt-2">
-                  {deck.slug}
-                </p>
-              </div>
+        <>
+          <div className="flex justify-between items-start border-b-4 border-black pb-6 mb-10">
+            <div className="space-y-1">
+              <h1 className="text-5xl font-black uppercase tracking-tighter leading-none">
+                {resumeData?.full_name || profile.full_name}
+              </h1>
+              <p className="text-xl font-medium text-gray-500">{profile.email}</p>
             </div>
+            <div className="text-right">
+              <span className="text-[10px] font-black bg-black text-white px-2 py-1 uppercase tracking-widest leading-none">
+                {company} Portal
+              </span>
+              <p className="text-sm font-bold text-gray-400 uppercase tracking-tighter mt-2">
+                {deck.slug}
+              </p>
+            </div>
+          </div>
 
-            {introText && (
+          {introText && (
+            <section className="mb-12">
+              <h2 className="text-xs font-black uppercase tracking-[0.3em] text-gray-500 mb-6 flex items-center gap-4">
+                Tailored Introduction <div className="h-[1px] bg-gray-100 flex-1"></div>
+              </h2>
+              <div className="text-xl italic text-gray-700 whitespace-pre-wrap leading-relaxed border-l-4 border-gray-100 pl-8">
+                {introText}
+              </div>
+            </section>
+          )}
+
+          <div className="space-y-12">
+            {resumeData?.experience?.length > 0 && (
               <section className="mb-12">
                 <h2 className="text-xs font-black uppercase tracking-[0.3em] text-gray-500 mb-6 flex items-center gap-4">
-                  Tailored Introduction <div className="h-[1px] bg-gray-100 flex-1"></div>
+                  Professional Experience <div className="h-[1px] bg-gray-100 flex-1"></div>
                 </h2>
-                <div className="text-xl italic text-gray-700 whitespace-pre-wrap leading-relaxed border-l-4 border-gray-100 pl-8">
-                  {introText}
+                <div className="space-y-8">
+                  {resumeData.experience.map((job, i) => (
+                    <div key={i} className="mb-8">
+                      <div className="flex justify-between items-baseline mb-1">
+                        <h3 className="text-xl font-black uppercase tracking-tight">{job.role}</h3>
+                        <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">{job.dates}</span>
+                      </div>
+                      <p className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-3">{job.company}</p>
+                      <ul className="list-disc pl-5 space-y-2 text-sm leading-relaxed text-gray-800">
+                        {job.bullets?.map((bullet, j) => (
+                          <li key={j}>{bullet}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
                 </div>
               </section>
             )}
-
-            <div className="space-y-12">
-              {resumeData?.experience?.length > 0 && (
-                <section className="mb-12">
-                  <h2 className="text-xs font-black uppercase tracking-[0.3em] text-gray-500 mb-6 flex items-center gap-4">
-                    Professional Experience <div className="h-[1px] bg-gray-100 flex-1"></div>
-                  </h2>
-                  <div className="space-y-8">
-                    {resumeData.experience.map((job, i) => (
-                      <div key={i} className="mb-8">
-                        <div className="flex justify-between items-baseline mb-1">
-                          <h3 className="text-xl font-black uppercase tracking-tight">{job.role}</h3>
-                          <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">{job.dates}</span>
-                        </div>
-                        <p className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-3">{job.company}</p>
-                        <ul className="list-disc pl-5 space-y-2 text-sm leading-relaxed text-gray-800">
-                          {job.bullets?.map((bullet, j) => (
-                            <li key={j}>{bullet}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-              )}
-            </div>
-          </>
-        )}
+          </div>
+        </>
 
         <footer className="mt-20 pt-8 border-t border-gray-100 flex justify-between items-center opacity-30 text-[10px] font-bold uppercase tracking-[0.2em]">
            <span>Verified RoleDeck Portal</span>
